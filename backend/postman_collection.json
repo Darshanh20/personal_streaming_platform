@@ -1,0 +1,549 @@
+{
+  "info": {
+    "_postman_id": "music-platform-collection",
+    "name": "🎵 Music Platform Backend API",
+    "description": "Complete API testing collection for Music Platform with file uploads",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔧 Health & Setup",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Database Connection Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/db-test",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "db-test"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🎵 Song Upload (Admin)",
+      "item": [
+        {
+          "name": "Upload Song with All Files",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "lyrics",
+                  "type": "file",
+                  "src": "/path/to/test-lyrics.txt",
+                  "disabled": false
+                },
+                {
+                  "key": "cover",
+                  "type": "file",
+                  "src": "/path/to/test-cover.jpg",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "My Awesome Song",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "This is a test song uploaded via Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "rap,hiphop,2024",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Song (Audio Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "Just Audio Song",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "180",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "pop",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Song (Audio + Lyrics)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "lyrics",
+                  "type": "file",
+                  "src": "/path/to/test-lyrics.txt",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "Song with Lyrics",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "This song has both audio and lyrics",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "200",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "rock,indie",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🎼 Get Songs",
+      "item": [
+        {
+          "name": "Get All Songs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/songs",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "songs"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Song by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/songs/SONG_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "songs", "SONG_ID_HERE"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👥 User Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"avatarUrl\": \"https://example.com/avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Admin Management",
+      "item": [
+        {
+          "name": "Get All Admins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/admins",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admins"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "⚠️ Error Handling Tests",
+      "item": [
+        {
+          "name": "Missing Admin Key",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "Test",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Admin Key",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "wrong-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "Test",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Missing Required Field (title)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-audio.mp3",
+                  "disabled": false
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Missing Audio File",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Test Song",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid File Type (image as audio)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-admin-key",
+                "value": "your-super-secret-admin-key-123",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "audio",
+                  "type": "file",
+                  "src": "/path/to/test-cover.jpg",
+                  "disabled": false
+                },
+                {
+                  "key": "title",
+                  "value": "Test",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/upload",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Non-existent Song",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/songs/invalid-id-12345",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "songs", "invalid-id-12345"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "admin_key",
+      "value": "your-super-secret-admin-key-123",
+      "type": "string"
+    },
+    {
+      "key": "song_id",
+      "value": "SONG_ID_HERE",
+      "type": "string"
+    }
+  ]
+}

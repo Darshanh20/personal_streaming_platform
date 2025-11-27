@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model - represents normal platform visitors
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  avatarUrl String?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
+
+// Admin model - separate from User, manages the platform
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  // Relations
+  songs Song[]
+
+  @@index([username])
+}
+
+// Song model - represents music tracks
+model Song {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  audioUrl    String
+  coverUrl    String
+  lyricsUrl   String?
+  tags        String[] // Array of tags (e.g., ["pop", "rock", "2024"])
+  duration    Int      // Duration in seconds
+  createdAt   DateTime @default(now())
+
+  // Relations
+  uploadedBy   Admin   @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  uploadedById String
+
+  @@index([uploadedById])
+  @@index([title])
+  @@index([createdAt])
+}
+
+// OPTIONAL FUTURE MODELS - Placeholders for future implementation
+
+// PlayHistory model - tracks user listening history
+// model PlayHistory {
+//   id        String   @id @default(cuid())
+//   userId    String
+//   songId    String
+//   playedAt  DateTime @default(now())
+//   duration  Int?     // How many seconds they listened
+//
+//   @@index([userId])
+//   @@index([songId])
+// }
+
+// Favorites model - tracks user's favorite songs
+// model Favorites {
+//   id        String   @id @default(cuid())
+//   userId    String
+//   songId    String
+//   addedAt   DateTime @default(now())
+//
+//   @@unique([userId, songId])
+//   @@index([userId])
+// }
