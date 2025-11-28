@@ -159,7 +159,7 @@ export default function AdminPage() {
   return (
     <div className="bg-black text-white min-h-screen flex flex-col">
       {/* Admin Navbar - Logo + Logout */}
-      <nav className="fixed top-0 w-full bg-black bg-opacity-95 backdrop-blur-sm z-50 border-b border-gray-900">
+      <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-sm z-50 border-b border-gray-900">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <div className="text-2xl font-bold text-white tracking-tight">

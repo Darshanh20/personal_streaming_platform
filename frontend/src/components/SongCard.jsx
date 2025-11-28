@@ -19,7 +19,7 @@ export default function SongCard({ title, artist = 'Artist', coverUrl, onPlay })
         {/* Play Button Overlay */}
         <button
           onClick={onPlay}
-          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300"
+          className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-all duration-300"
         >
           <div className="text-white text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             ▶

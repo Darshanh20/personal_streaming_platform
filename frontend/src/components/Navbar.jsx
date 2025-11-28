@@ -13,7 +13,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-black bg-opacity-95 backdrop-blur-sm z-50 border-b border-gray-900">
+    <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-sm z-50 border-b border-gray-900">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-white tracking-tight hover:text-gray-300 transition-colors duration-300">

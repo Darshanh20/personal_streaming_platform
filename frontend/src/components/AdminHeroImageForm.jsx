@@ -364,7 +364,7 @@ export default function AdminHeroImageForm({ onSuccess }) {
             <button
               type="button"
               onClick={handleDelete}
-              className="px-6 py-3 font-semibold text-red-500 bg-transparent border border-red-700 hover:border-red-600 hover:bg-red-900 hover:bg-opacity-20 transition-all duration-300"
+              className="px-6 py-3 font-semibold text-red-500 bg-transparent border border-red-700 hover:border-red-600 hover:bg-red-900/20 transition-all duration-300"
             >
               🗑️ Delete
             </button>

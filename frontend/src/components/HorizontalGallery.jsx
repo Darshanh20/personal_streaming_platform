@@ -39,7 +39,7 @@ export default function HorizontalGallery() {
                 {songs.map((song) => (
                   <div
                     key={song.id}
-                    className="flex-shrink-0 w-48 h-48 bg-gray-900 border border-gray-800 flex items-center justify-center hover:border-gray-700 hover:scale-105 transition-all duration-300 cursor-pointer group relative overflow-hidden"
+                    className="shrink-0 w-48 h-48 bg-gray-900 border border-gray-800 flex items-center justify-center hover:border-gray-700 hover:scale-105 transition-all duration-300 cursor-pointer group relative overflow-hidden"
                   >
                     {song.coverUrl ? (
                       <img
@@ -55,7 +55,7 @@ export default function HorizontalGallery() {
                     )}
 
                     {/* Overlay on Hover */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                       <div className="text-white text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         ▶
                       </div>

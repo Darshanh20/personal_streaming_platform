@@ -98,7 +98,6 @@ export default function SongsPage() {
               <div key={song.id} onClick={() => setSelectedSong(song)}>
                 <SongCard
                   title={song.title}
-                  artist={song.uploadedBy?.username || 'Artist'}
                   coverUrl={song.coverUrl}
                   onPlay={() => setSelectedSong(song)}
                 />
@@ -131,7 +130,7 @@ export default function SongsPage() {
                 className="w-full h-64 object-cover border border-gray-800"
               />
             ) : (
-              <div className="w-full h-64 bg-gradient-to-br from-gray-900 to-black border border-gray-800 flex items-center justify-center">
+              <div className="w-full h-64 bg-linear-to-br from-gray-900 to-black border border-gray-800 flex items-center justify-center">
                 <div className="text-6xl">♫</div>
               </div>
             )}
@@ -173,29 +172,6 @@ export default function SongsPage() {
                 <audio controls src={selectedSong.audioUrl} className="w-full" />
               </div>
             )}
-
-            {/* Download Links */}
-            <div className="flex gap-3">
-              {selectedSong.audioUrl && (
-                <a
-                  href={selectedSong.audioUrl}
-                  download
-                  className="flex-1 bg-white text-black py-3 font-semibold text-center hover:bg-gray-100 transition-colors duration-300"
-                >
-                  📥 Download Audio
-                </a>
-              )}
-
-              {selectedSong.lyricsUrl && (
-                <a
-                  href={selectedSong.lyricsUrl}
-                  download
-                  className="flex-1 bg-gray-800 text-white py-3 font-semibold text-center border border-gray-700 hover:bg-gray-700 transition-colors duration-300"
-                >
-                  📝 Download Lyrics
-                </a>
-              )}
-            </div>
           </div>
         </div>
       )}
