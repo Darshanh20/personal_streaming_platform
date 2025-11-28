@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 // Route imports
 import adminRoutes from './routes/admin.js';
 import songsRoutes from './routes/songs.js';
+import heroRoutes from './routes/hero.js';
 
 dotenv.config();
 
@@ -65,6 +66,9 @@ app.use('/api/admin', adminRoutes);
 
 // Public song routes (get songs)
 app.use('/api/songs', songsRoutes);
+
+// Hero image routes (landing page hero/banner)
+app.use('/api/hero', heroRoutes);
 
 // ========== LEGACY ROUTES (for backward compatibility) ==========
 
@@ -186,9 +190,14 @@ const server = app.listen(PORT, () => {
   console.log(`     GET http://localhost:${PORT}/api/db-test`);
   console.log('\n   Admin Routes (requires x-admin-key header):');
   console.log(`     POST http://localhost:${PORT}/api/admin/upload`);
-  console.log('\n   Public Song Routes:');
+  console.log('\n   Public song routes:');
   console.log(`     GET http://localhost:${PORT}/api/songs`);
   console.log(`     GET http://localhost:${PORT}/api/songs/:id`);
+  console.log('\n   Hero Image Routes:');
+  console.log(`     GET http://localhost:${PORT}/api/hero`);
+  console.log(`     POST http://localhost:${PORT}/api/hero`);
+  console.log(`     PUT http://localhost:${PORT}/api/hero/:id`);
+  console.log(`     DELETE http://localhost:${PORT}/api/hero/:id`);
   console.log('\n   User Routes:');
   console.log(`     GET http://localhost:${PORT}/api/users`);
   console.log(`     POST http://localhost:${PORT}/api/users`);

@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import SongCard from '../components/SongCard';
+import Footer from '../components/Footer';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
@@ -37,10 +40,10 @@ export default function SongsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-400 text-lg mb-2">🔄 Loading songs...</p>
-          <div className="animate-spin text-blue-500 text-3xl">⏳</div>
+          <div className="animate-spin text-white text-3xl">⏳</div>
         </div>
       </div>
     );
@@ -48,110 +51,69 @@ export default function SongsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4 rounded-lg">
+      <div className="min-h-screen bg-black p-8">
+        <Navbar />
+        <div className="max-w-2xl mx-auto pt-20">
+          <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4 rounded-sm">
             ❌ {error}
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (songs.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-400 text-lg">🎵 No songs found</p>
-          <p className="text-gray-500 text-sm">Upload your first song from the admin panel</p>
+      <div className="min-h-screen bg-black flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-gray-400 text-lg">🎵 No songs found</p>
+            <p className="text-gray-500 text-sm">Upload your first song from the admin panel</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold text-white mb-2">🎵 Music Library</h1>
-          <p className="text-gray-400">
-            {songs.length} {songs.length === 1 ? 'song' : 'songs'} available
-          </p>
-        </div>
+    <div className="bg-black text-white min-h-screen flex flex-col">
+      <Navbar />
 
-        {/* Songs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {songs.map((song) => (
-            <div
-              key={song.id}
-              className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden hover:border-blue-500 transition cursor-pointer group"
-              onClick={() => setSelectedSong(song)}
-            >
-              {/* Cover Image */}
-              {song.coverUrl ? (
-                <img
-                  src={song.coverUrl}
-                  alt={song.title}
-                  className="w-full h-48 object-cover group-hover:opacity-75 transition"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
+      <main className="flex-1 py-20 px-6 pt-32">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-12">
+            <h1 className="text-5xl font-bold text-white mb-2">Music Library</h1>
+            <p className="text-gray-400">
+              {songs.length} {songs.length === 1 ? 'song' : 'songs'} available
+            </p>
+          </div>
+
+          {/* Songs Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {songs.map((song) => (
+              <div key={song.id} onClick={() => setSelectedSong(song)}>
+                <SongCard
+                  title={song.title}
+                  artist={song.uploadedBy?.username || 'Artist'}
+                  coverUrl={song.coverUrl}
+                  onPlay={() => setSelectedSong(song)}
                 />
-              ) : (
-                <div className="w-full h-48 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center group-hover:from-blue-500 group-hover:to-purple-500 transition">
-                  <span className="text-5xl">🎵</span>
-                </div>
-              )}
-
-              {/* Song Info */}
-              <div className="p-4">
-                <h3 className="text-lg font-bold text-white mb-1 truncate">{song.title}</h3>
-
-                {song.description && (
-                  <p className="text-gray-400 text-sm mb-3 line-clamp-2">
-                    {song.description}
-                  </p>
-                )}
-
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-gray-500 text-sm">⏱️ {formatDuration(song.duration)}</span>
-                </div>
-
-                {/* Tags */}
-                {song.tags && song.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {song.tags.slice(0, 3).map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-block bg-blue-900 text-blue-200 text-xs px-2 py-1 rounded"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                    {song.tags.length > 3 && (
-                      <span className="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
-                        +{song.tags.length - 3}
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Play Button */}
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition">
-                  ▶️ Play
-                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </main>
 
-      {/* Now Playing Modal */}
+      {/* Song Player Modal */}
       {selectedSong && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 border border-gray-700 rounded-lg max-w-2xl w-full p-8">
-            <div className="flex justify-between items-start mb-6">
+          <div className="bg-gray-900 border border-gray-800 max-w-2xl w-full p-8 space-y-6">
+            {/* Close Button */}
+            <div className="flex justify-between items-start">
               <h2 className="text-3xl font-bold text-white">{selectedSong.title}</h2>
               <button
                 onClick={() => setSelectedSong(null)}
@@ -162,16 +124,20 @@ export default function SongsPage() {
             </div>
 
             {/* Cover Image */}
-            {selectedSong.coverUrl && (
+            {selectedSong.coverUrl ? (
               <img
                 src={selectedSong.coverUrl}
                 alt={selectedSong.title}
-                className="w-full h-64 object-cover rounded-lg mb-6"
+                className="w-full h-64 object-cover border border-gray-800"
               />
+            ) : (
+              <div className="w-full h-64 bg-gradient-to-br from-gray-900 to-black border border-gray-800 flex items-center justify-center">
+                <div className="text-6xl">♫</div>
+              </div>
             )}
 
             {/* Song Details */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-4">
               {selectedSong.description && (
                 <div>
                   <p className="text-gray-400 text-sm">Description</p>
@@ -182,9 +148,7 @@ export default function SongsPage() {
               <div className="flex gap-8">
                 <div>
                   <p className="text-gray-400 text-sm">Duration</p>
-                  <p className="text-white text-lg">
-                    {formatDuration(selectedSong.duration)}
-                  </p>
+                  <p className="text-white text-lg">{formatDuration(selectedSong.duration)}</p>
                 </div>
               </div>
 
@@ -193,10 +157,7 @@ export default function SongsPage() {
                   <p className="text-gray-400 text-sm mb-2">Tags</p>
                   <div className="flex flex-wrap gap-2">
                     {selectedSong.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-blue-900 text-blue-200 px-3 py-1 rounded-full text-sm"
-                      >
+                      <span key={idx} className="bg-gray-800 text-gray-300 px-3 py-1 text-sm border border-gray-700">
                         #{tag}
                       </span>
                     ))}
@@ -207,13 +168,9 @@ export default function SongsPage() {
 
             {/* Audio Player */}
             {selectedSong.audioUrl && (
-              <div className="mb-6">
+              <div>
                 <p className="text-gray-400 text-sm mb-2">Player</p>
-                <audio
-                  controls
-                  src={selectedSong.audioUrl}
-                  className="w-full bg-gray-700 rounded"
-                />
+                <audio controls src={selectedSong.audioUrl} className="w-full" />
               </div>
             )}
 
@@ -223,7 +180,7 @@ export default function SongsPage() {
                 <a
                   href={selectedSong.audioUrl}
                   download
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded font-semibold text-center transition"
+                  className="flex-1 bg-white text-black py-3 font-semibold text-center hover:bg-gray-100 transition-colors duration-300"
                 >
                   📥 Download Audio
                 </a>
@@ -233,7 +190,7 @@ export default function SongsPage() {
                 <a
                   href={selectedSong.lyricsUrl}
                   download
-                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded font-semibold text-center transition"
+                  className="flex-1 bg-gray-800 text-white py-3 font-semibold text-center border border-gray-700 hover:bg-gray-700 transition-colors duration-300"
                 >
                   📝 Download Lyrics
                 </a>
@@ -242,6 +199,8 @@ export default function SongsPage() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }

@@ -1,40 +1,243 @@
-import { useState } from 'react';
-import SongUploadForm from '../components/SongUploadForm';
-import SongsList from '../components/SongsList';
+import { useState, useEffect } from 'react';
+import Footer from '../components/Footer';
+import AdminSongList from '../components/AdminSongList';
+import AdminEditSongForm from '../components/AdminEditSongForm';
+import AdminSongUploadForm from '../components/AdminSongUploadForm';
+import AdminHeroImageForm from '../components/AdminHeroImageForm';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export default function AdminPage() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  // Authentication state
+  const [authenticated, setAuthenticated] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
 
-  const handleUploadSuccess = () => {
-    // Refresh the songs list
-    setRefreshKey(prev => prev + 1);
+  // Dashboard state
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editingSong, setEditingSong] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Fetch songs from backend
+  useEffect(() => {
+    if (authenticated) {
+      fetchSongs();
+    }
+  }, [refreshTrigger, authenticated]);
+
+  const fetchSongs = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_URL}/songs`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch songs');
+      }
+
+      const data = await response.json();
+      setSongs(data.data || []);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error fetching songs:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
-      {/* Admin Header */}
-      <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-5xl font-bold mb-2">🔐 Admin Panel</h1>
-          <p className="text-lg text-gray-100">Upload and manage your music collection</p>
-        </div>
-      </div>
+  // Handle password verification
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    setPasswordError(null);
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Upload Form */}
-        <div className="mb-16">
-          <SongUploadForm onUploadSuccess={handleUploadSuccess} />
-        </div>
+    const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
-        {/* Songs List */}
-        <div>
-          <h2 className="text-3xl font-bold text-white mb-8">📊 All Songs</h2>
-          <div key={refreshKey}>
-            <SongsList />
+    if (!correctPassword) {
+      setPasswordError('❌ Admin password not configured in .env');
+      return;
+    }
+
+    if (adminPassword !== correctPassword) {
+      setPasswordError('❌ Incorrect password. Access denied.');
+      setAdminPassword('');
+      return;
+    }
+
+    setAuthenticated(true);
+    setAdminPassword('');
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    setAuthenticated(false);
+    setAdminPassword('');
+    setError(null);
+    setSongs([]);
+  };
+
+  const handleEdit = (song) => {
+    setEditingSong(song);
+  };
+
+  const handleSaveEdit = (updatedSong) => {
+    // Update the song in the list
+    setSongs((prevSongs) =>
+      prevSongs.map((song) =>
+        song.id === updatedSong.id ? updatedSong : song
+      )
+    );
+    setEditingSong(null);
+  };
+
+  const handleDelete = (songId) => {
+    // Remove the song from the list
+    setSongs((prevSongs) => prevSongs.filter((song) => song.id !== songId));
+  };
+
+  const handleUploadSuccess = async () => {
+    // Refresh the songs list
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
+  // Password Screen (Authentication Gate)
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          {/* Lock Icon */}
+          <div className="text-center mb-8">
+            <div className="text-6xl mb-4">🔐</div>
+            <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
+            <p className="text-gray-400">Enter password to access admin dashboard</p>
+          </div>
+
+          {/* Password Form */}
+          <form onSubmit={handlePasswordSubmit} className="bg-gray-950 border border-gray-800 p-8 space-y-6">
+            {/* Error Message */}
+            {passwordError && (
+              <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4 rounded-sm">
+                {passwordError}
+              </div>
+            )}
+
+            {/* Password Input */}
+            <div>
+              <label className="block text-white font-semibold mb-2 text-sm">Admin Password</label>
+              <input
+                type="password"
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                placeholder="Enter your admin password"
+                className="w-full px-4 py-3 bg-gray-900 border border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-gray-700 transition-colors duration-300"
+                autoFocus
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 font-bold text-black bg-white hover:bg-gray-100 transition-colors duration-300"
+            >
+              Unlock Admin Panel
+            </button>
+          </form>
+
+          {/* Info Box */}
+          <div className="mt-8 bg-gray-950 border border-gray-800 rounded-sm p-6">
+            <p className="text-gray-400 text-sm">
+              🔒 <strong>This is a restricted area.</strong> Only authorized administrators can access this dashboard.
+            </p>
           </div>
         </div>
       </div>
+    );
+  }
+
+  // Admin Dashboard (After Authentication)
+  return (
+    <div className="bg-black text-white min-h-screen flex flex-col">
+      {/* Admin Navbar - Logo + Logout */}
+      <nav className="fixed top-0 w-full bg-black bg-opacity-95 backdrop-blur-sm z-50 border-b border-gray-900">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          {/* Logo */}
+          <div className="text-2xl font-bold text-white tracking-tight">
+            DhxMusic
+          </div>
+          
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors duration-300"
+          >
+            🚪 Logout
+          </button>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="flex-1 py-20 px-6 pt-32">
+        <div className="max-w-6xl mx-auto">
+          {/* Admin Header */}
+          <div className="mb-16">
+            <h1 className="text-4xl font-bold text-white mb-2">🎵 Admin Dashboard</h1>
+            <p className="text-gray-400">Manage your music collection</p>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4 rounded-sm mb-8">
+              ❌ {error}
+            </div>
+          )}
+
+          {/* Upload Form Section */}
+          <div className="mb-16 pb-16 border-b border-gray-800">
+            <AdminSongUploadForm onSuccess={handleUploadSuccess} />
+          </div>
+
+          {/* Hero Image Section */}
+          <div className="mb-16 pb-16 border-b border-gray-800">
+            <AdminHeroImageForm onSuccess={handleUploadSuccess} />
+          </div>
+
+          {/* Songs List Section */}
+          <div>
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">All Songs</h2>
+              <p className="text-gray-400 text-sm">
+                {songs.length > 0 ? `${songs.length} song${songs.length !== 1 ? 's' : ''} in your collection` : 'No songs yet'}
+              </p>
+            </div>
+
+            {loading ? (
+              <div className="bg-gray-950 border border-gray-800 p-12 text-center">
+                <p className="text-gray-400">Loading songs...</p>
+              </div>
+            ) : (
+              <AdminSongList
+                songs={songs}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                refreshTrigger={refreshTrigger}
+              />
+            )}
+          </div>
+        </div>
+      </main>
+
+      {/* Edit Modal */}
+      {editingSong && (
+        <AdminEditSongForm
+          song={editingSong}
+          onSave={handleSaveEdit}
+          onCancel={() => setEditingSong(null)}
+        />
+      )}
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

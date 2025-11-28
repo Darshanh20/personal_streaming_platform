@@ -5,7 +5,7 @@ import LatestRelease from '../components/LatestRelease';
 import HorizontalGallery from '../components/HorizontalGallery';
 import Footer from '../components/Footer';
 
-export default function HomePage() {
+export default function Landing() {
   const features = [
     {
       title: 'Stream Music',
@@ -47,6 +47,7 @@ export default function HomePage() {
           opacity: 0;
         }
 
+        /* Smooth scrollbar */
         ::-webkit-scrollbar {
           height: 8px;
         }
@@ -115,4 +116,3 @@ export default function HomePage() {
     </div>
   );
 }
-

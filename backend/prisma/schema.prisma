@@ -55,6 +55,22 @@ model Song {
   @@index([createdAt])
 }
 
+// HeroImage model - Hero/banner image for landing page
+model HeroImage {
+  id        String   @id @default(cuid())
+  imageUrl  String   // URL of the hero image
+  title     String?  // Optional title overlay
+  width     Int?     // Image width (for responsive sizing)
+  height    Int?     // Image height (for responsive sizing)
+  objectFit String?  // CSS object-fit value (cover, contain, fill, etc.) - default: cover
+  opacity   Float?   // Image opacity (0-1) - default: 1
+  blur      Int?     // Blur filter in pixels - default: 0
+  brightness Float?  // Brightness filter (0-2) - default: 1
+  contrast  Float?   // Contrast filter (0-2) - default: 1
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // OPTIONAL FUTURE MODELS - Placeholders for future implementation
 
 // PlayHistory model - tracks user listening history

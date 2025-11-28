@@ -9,6 +9,7 @@ const fileFilter = (req, file, cb) => {
     audio: ['audio/mpeg', 'audio/wav', 'audio/mp3', 'audio/x-wav', 'audio/wave'],
     lyrics: ['text/plain'],
     cover: ['image/jpeg', 'image/png', 'image/webp'],
+    heroImage: ['image/jpeg', 'image/png', 'image/webp'], // Hero image field
   };
 
   const fieldName = file.fieldname;

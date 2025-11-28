@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
-import HomePage from './pages/HomePage'
+import Landing from './pages/Landing'
 import SongsPage from './pages/SongsPage'
-import AdminUploadPage from './pages/AdminUploadPage'
+import AdminPage from './pages/AdminPage'
 
 function App() {
   return (
@@ -10,11 +10,11 @@ function App() {
       <div className="min-h-screen bg-gray-900">
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/songs" element={<SongsPage />} />
           
-          {/* Secret Admin Routes - No UI links, manually visit the URL */}
-          <Route path="/admin" element={<AdminUploadPage />} />
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminPage />} />
           
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -25,3 +25,4 @@ function App() {
 }
 
 export default App
+
