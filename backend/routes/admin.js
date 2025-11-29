@@ -205,6 +205,41 @@ router.post(
 );
 
 /**
+ * GET /admin/songs
+ * Retrieve all songs (including unpublished) for admin dashboard
+ * Only accessible with valid admin authentication
+ */
+router.get('/songs', adminAuth, async (req, res) => {
+  try {
+    const songs = await prisma.song.findMany({
+      include: {
+        uploadedBy: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    res.json({
+      success: true,
+      count: songs.length,
+      data: songs,
+    });
+  } catch (error) {
+    console.error('Error fetching songs:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to fetch songs',
+    });
+  }
+});
+
+/**
  * DELETE /admin/songs/:id
  * Delete a song by ID (requires admin authentication)
  * Also deletes associated files from Cloudinary
@@ -451,6 +486,67 @@ router.put(
     }
   }
 );
+
+/**
+ * PUT /admin/toggle-publish
+ * Toggle the published status of a song
+ * Only accessible with valid admin authentication
+ *
+ * Query Parameters:
+ * - songId (String): The ID of the song to toggle - REQUIRED
+ */
+router.put('/toggle-publish', adminAuth, async (req, res) => {
+  try {
+    const { songId } = req.query;
+
+    if (!songId) {
+      return res.status(400).json({
+        success: false,
+        error: 'songId is required',
+      });
+    }
+
+    // Get the current song
+    const song = await prisma.song.findUnique({
+      where: { id: songId },
+    });
+
+    if (!song) {
+      return res.status(404).json({
+        success: false,
+        error: 'Song not found',
+      });
+    }
+
+    // Toggle the published status
+    const updatedSong = await prisma.song.update({
+      where: { id: songId },
+      data: {
+        published: !song.published,
+      },
+      include: {
+        uploadedBy: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: `Song ${updatedSong.published ? 'published' : 'unpublished'} successfully`,
+      data: updatedSong,
+    });
+  } catch (error) {
+    console.error('Toggle publish error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to toggle publish status',
+    });
+  }
+});
 
 export default router;
 

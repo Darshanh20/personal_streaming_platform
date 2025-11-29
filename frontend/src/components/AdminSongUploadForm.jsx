@@ -248,6 +248,23 @@ export default function AdminSongUploadForm({ onSuccess }) {
           </button>
         </div>
       </form>
+
+      <style>{`
+        /* Scrollbar styling */
+        div::-webkit-scrollbar {
+          width: 8px;
+        }
+        div::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        div::-webkit-scrollbar-thumb {
+          background: #1f2937;
+          border-radius: 4px;
+        }
+        div::-webkit-scrollbar-thumb:hover {
+          background: #374151;
+        }
+      `}</style>
     </div>
   );
 }

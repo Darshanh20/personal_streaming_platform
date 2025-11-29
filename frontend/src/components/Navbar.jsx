@@ -1,16 +1,27 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
-  const [activeNav, setActiveNav] = useState('home');
+  const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
+  const navItems =   [
     { id: 'home', label: 'Home', href: '/' },
     { id: 'music', label: 'Music', href: '/songs' },
-    { id: 'lyrics', label: 'Lyrics', href: '#lyrics' },
-    { id: 'about', label: 'About', href: '#about' },
-    { id: 'contact', label: 'Contact', href: '#contact' },
   ];
+
+  // Determine active nav based on current route
+  const getActiveNav = () => {
+    if (location.pathname === '/') return 'home';
+    if (location.pathname === '/songs') return 'music';
+    return 'home';
+  };
+
+  const activeNav = getActiveNav();
+
+  const handleNavClick = () => {
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-sm z-50 border-b border-gray-900">
@@ -26,7 +37,7 @@ export default function Navbar() {
             <a
               key={item.id}
               href={item.href}
-              onClick={() => setActiveNav(item.id)}
+              onClick={() => handleNavClick()}
               className={`text-sm font-medium transition-all duration-300 relative group ${
                 activeNav === item.id ? 'text-white' : 'text-gray-400 hover:text-white'
               }`}
@@ -41,11 +52,37 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Mobile Menu */}
-        <button className="md:hidden text-white text-xl hover:text-gray-300 transition-colors duration-300">
-          ☰
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden text-white text-xl hover:text-gray-300 transition-colors duration-300"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? '✕' : '☰'}
         </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-black/98 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-6 py-4 space-y-4">
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={() => handleNavClick()}
+                className={`block py-2 text-sm font-medium transition-all duration-300 ${
+                  activeNav === item.id
+                    ? 'text-white border-l-2 border-white pl-4'
+                    : 'text-gray-400 hover:text-white pl-4'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

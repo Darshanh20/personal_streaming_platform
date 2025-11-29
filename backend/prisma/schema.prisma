@@ -44,6 +44,7 @@ model Song {
   lyricsUrl   String?
   tags        String[] // Array of tags (e.g., ["pop", "rock", "2024"])
   duration    Int      // Duration in seconds
+  published   Boolean  @default(false) // Whether song is visible to public
   createdAt   DateTime @default(now())
 
   // Relations
@@ -53,20 +54,43 @@ model Song {
   @@index([uploadedById])
   @@index([title])
   @@index([createdAt])
+  @@index([published])
 }
 
 // HeroImage model - Hero/banner image for landing page
 model HeroImage {
   id        String   @id @default(cuid())
+  
+  // Image and basic styling
   imageUrl  String   // URL of the hero image
-  title     String?  // Optional title overlay
-  width     Int?     // Image width (for responsive sizing)
-  height    Int?     // Image height (for responsive sizing)
-  objectFit String?  // CSS object-fit value (cover, contain, fill, etc.) - default: cover
-  opacity   Float?   // Image opacity (0-1) - default: 1
-  blur      Int?     // Blur filter in pixels - default: 0
-  brightness Float?  // Brightness filter (0-2) - default: 1
-  contrast  Float?   // Contrast filter (0-2) - default: 1
+  imageFit  String   @default("cover") // CSS object-fit value (cover, contain, fill, etc.)
+  imageOpacity Float @default(1) // Image opacity (0-1)
+  blur      Int     @default(0) // Blur filter in pixels
+  brightness Float @default(1) // Brightness filter (0.5-2)
+  contrast  Float @default(1) // Contrast filter (0.5-2)
+  
+  // Overlay styling
+  overlayColor String @default("#000000") // Hex color for overlay
+  overlayOpacity Float @default(0.65) // Overlay opacity (0-1)
+  
+  // Text content
+  heading   String   @default("Welcome to My Music.") // Main H1 heading
+  subheading String  @default("Exclusive tracks, lyrics, and stories") // Subheading/description
+  textColor String   @default("white") // Text color: white or black
+  textShadow Boolean @default(false) // Add text shadow for better readability
+  
+  // Primary CTA button
+  primaryBtnText String @default("Listen Now")
+  primaryBtnLink String @default("/songs")
+  
+  // Secondary CTA button
+  secondaryBtnText String @default("View Lyrics")
+  secondaryBtnLink String @default("/lyrics")
+  
+  // Hero section control
+  enabled Boolean @default(true) // Toggle hero section on/off
+  
+  // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

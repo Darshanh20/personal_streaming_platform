@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
+import StatusBadge from './StatusBadge';
+import PublishButton from './PublishButton';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger }) {
-  const [loading, setLoading] = useState(false);
+export default function AdminSongList({ songs: initialSongs, onEdit, onDelete, refreshTrigger }) {
+  const [songs, setSongs] = useState(initialSongs || []);
   const [deleting, setDeleting] = useState(null);
+
+  // Update songs when initial songs change
+  useEffect(() => {
+    setSongs(initialSongs || []);
+  }, [initialSongs, refreshTrigger]);
 
   const handleDelete = async (songId) => {
     if (!window.confirm('Are you sure you want to delete this song?')) {
@@ -29,6 +36,8 @@ export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger 
         throw new Error('Failed to delete song');
       }
 
+      // Update local songs list
+      setSongs((prev) => prev.filter((song) => song.id !== songId));
       // Call parent callback
       onDelete(songId);
     } catch (error) {
@@ -37,6 +46,15 @@ export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger 
     } finally {
       setDeleting(null);
     }
+  };
+
+  const handlePublishToggle = (updatedSong) => {
+    // Update the song in the local list
+    setSongs((prev) =>
+      prev.map((song) =>
+        song.id === updatedSong.id ? updatedSong : song
+      )
+    );
   };
 
   if (!songs || songs.length === 0) {
@@ -56,7 +74,7 @@ export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger 
         >
           <div className="flex gap-6">
             {/* Cover Image */}
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="w-20 h-20 bg-gray-900 border border-gray-800 flex items-center justify-center">
                 {song.coverUrl ? (
                   <img
@@ -72,7 +90,10 @@ export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger 
 
             {/* Song Info */}
             <div className="flex-1 min-w-0">
-              <h3 className="text-white font-semibold text-lg truncate">{song.title}</h3>
+              <div className="flex items-center gap-3 mb-1">
+                <h3 className="text-white font-semibold text-lg truncate">{song.title}</h3>
+                <StatusBadge published={song.published} />
+              </div>
               <p className="text-gray-400 text-sm mt-1 line-clamp-2">
                 {song.description || 'No description'}
               </p>
@@ -85,7 +106,12 @@ export default function AdminSongList({ songs, onEdit, onDelete, refreshTrigger 
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 items-center flex-shrink-0">
+            <div className="flex gap-3 items-center shrink-0">
+              <PublishButton
+                songId={song.id}
+                published={song.published}
+                onToggle={handlePublishToggle}
+              />
               <button
                 onClick={() => onEdit(song)}
                 className="px-4 py-2 text-white border border-gray-600 hover:border-gray-400 hover:bg-gray-900 transition-all duration-300 text-sm font-medium"

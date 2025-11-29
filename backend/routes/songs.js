@@ -6,12 +6,16 @@ const prisma = new PrismaClient();
 
 /**
  * GET /songs
- * Retrieve all songs from the database
+ * Retrieve all published songs from the database
  * Sorted by creation date (newest first)
+ * Public users only see published = true
  */
 router.get('/', async (req, res) => {
   try {
     const songs = await prisma.song.findMany({
+      where: {
+        published: true, // Only return published songs to public
+      },
       include: {
         uploadedBy: {
           select: {
@@ -41,7 +45,8 @@ router.get('/', async (req, res) => {
 
 /**
  * GET /songs/:id
- * Retrieve a single song by ID
+ * Retrieve a single published song by ID
+ * Public users only see published = true
  */
 router.get('/:id', async (req, res) => {
   try {
@@ -60,6 +65,14 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!song) {
+      return res.status(404).json({
+        success: false,
+        error: 'Song not found',
+      });
+    }
+
+    // Check if song is published for public access
+    if (!song.published) {
       return res.status(404).json({
         success: false,
         error: 'Song not found',

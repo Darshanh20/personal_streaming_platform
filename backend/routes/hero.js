@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
 
 /**
  * POST /hero
- * Upload/set a new hero image (admin only)
+ * Upload/set a new hero configuration (admin only)
  */
 router.post(
   '/',
@@ -64,7 +64,24 @@ router.post(
   upload.single('heroImage'),
   async (req, res) => {
     try {
-      const { title, objectFit, opacity, blur, brightness, contrast } = req.body;
+      const {
+        heading,
+        subheading,
+        overlayColor,
+        overlayOpacity,
+        primaryBtnText,
+        primaryBtnLink,
+        secondaryBtnText,
+        secondaryBtnLink,
+        textColor,
+        textShadow,
+        imageFit,
+        imageOpacity,
+        blur,
+        brightness,
+        contrast,
+        enabled,
+      } = req.body;
 
       if (!req.file) {
         return res.status(400).json({
@@ -107,22 +124,32 @@ router.post(
         });
       }
 
-      // Create new hero image record
+      // Create new hero configuration
       const heroImage = await prisma.heroImage.create({
         data: {
           imageUrl,
-          title: title || null,
-          objectFit: objectFit || 'cover',
-          opacity: opacity ? parseFloat(opacity) : 1,
+          heading: heading || 'Welcome to My Music.',
+          subheading: subheading || 'Exclusive tracks, lyrics, and stories',
+          overlayColor: overlayColor || '#000000',
+          overlayOpacity: overlayOpacity ? parseFloat(overlayOpacity) : 0.65,
+          primaryBtnText: primaryBtnText || 'Listen Now',
+          primaryBtnLink: primaryBtnLink || '/songs',
+          secondaryBtnText: secondaryBtnText || 'View Lyrics',
+          secondaryBtnLink: secondaryBtnLink || '/lyrics',
+          textColor: textColor || 'white',
+          textShadow: textShadow === 'true' || textShadow === true || false,
+          imageFit: imageFit || 'cover',
+          imageOpacity: imageOpacity ? parseFloat(imageOpacity) : 1,
           blur: blur ? parseInt(blur, 10) : 0,
           brightness: brightness ? parseFloat(brightness) : 1,
           contrast: contrast ? parseFloat(contrast) : 1,
+          enabled: enabled === 'true' || enabled === true || true,
         },
       });
 
       res.status(201).json({
         success: true,
-        message: 'Hero image uploaded successfully',
+        message: 'Hero configuration created successfully',
         data: heroImage,
       });
     } catch (error) {
@@ -137,7 +164,7 @@ router.post(
 
       res.status(500).json({
         success: false,
-        error: error.message || 'Failed to upload hero image',
+        error: error.message || 'Failed to create hero configuration',
       });
     }
   }
@@ -145,7 +172,7 @@ router.post(
 
 /**
  * PUT /hero/:id
- * Update hero image settings (admin only)
+ * Update hero configuration (admin only)
  */
 router.put(
   '/:id',
@@ -155,7 +182,24 @@ router.put(
   async (req, res) => {
     try {
       const { id } = req.params;
-      const { title, objectFit, opacity, blur, brightness, contrast } = req.body;
+      const {
+        heading,
+        subheading,
+        overlayColor,
+        overlayOpacity,
+        primaryBtnText,
+        primaryBtnLink,
+        secondaryBtnText,
+        secondaryBtnLink,
+        textColor,
+        textShadow,
+        imageFit,
+        imageOpacity,
+        blur,
+        brightness,
+        contrast,
+        enabled,
+      } = req.body;
 
       // Find existing hero
       const existingHero = await prisma.heroImage.findUnique({
@@ -165,19 +209,29 @@ router.put(
       if (!existingHero) {
         return res.status(404).json({
           success: false,
-          error: 'Hero image not found',
+          error: 'Hero configuration not found',
         });
       }
 
       let updateData = {};
 
       // Update text/style fields
-      if (title !== undefined) updateData.title = title || null;
-      if (objectFit) updateData.objectFit = objectFit;
-      if (opacity !== undefined) updateData.opacity = parseFloat(opacity);
+      if (heading !== undefined) updateData.heading = heading;
+      if (subheading !== undefined) updateData.subheading = subheading;
+      if (overlayColor !== undefined) updateData.overlayColor = overlayColor;
+      if (overlayOpacity !== undefined) updateData.overlayOpacity = parseFloat(overlayOpacity);
+      if (primaryBtnText !== undefined) updateData.primaryBtnText = primaryBtnText;
+      if (primaryBtnLink !== undefined) updateData.primaryBtnLink = primaryBtnLink;
+      if (secondaryBtnText !== undefined) updateData.secondaryBtnText = secondaryBtnText;
+      if (secondaryBtnLink !== undefined) updateData.secondaryBtnLink = secondaryBtnLink;
+      if (textColor !== undefined) updateData.textColor = textColor;
+      if (textShadow !== undefined) updateData.textShadow = textShadow === 'true' || textShadow === true;
+      if (imageFit !== undefined) updateData.imageFit = imageFit;
+      if (imageOpacity !== undefined) updateData.imageOpacity = parseFloat(imageOpacity);
       if (blur !== undefined) updateData.blur = parseInt(blur, 10);
       if (brightness !== undefined) updateData.brightness = parseFloat(brightness);
       if (contrast !== undefined) updateData.contrast = parseFloat(contrast);
+      if (enabled !== undefined) updateData.enabled = enabled === 'true' || enabled === true;
 
       // If new image provided, upload it
       if (req.file) {
@@ -218,14 +272,14 @@ router.put(
 
       res.json({
         success: true,
-        message: 'Hero image updated successfully',
+        message: 'Hero configuration updated successfully',
         data: updatedHero,
       });
     } catch (error) {
       console.error('Update error:', error);
       res.status(500).json({
         success: false,
-        error: error.message || 'Failed to update hero image',
+        error: error.message || 'Failed to update hero configuration',
       });
     }
   }

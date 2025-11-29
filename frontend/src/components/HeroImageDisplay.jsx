@@ -45,11 +45,11 @@ export default function HeroImageDisplay() {
       className="absolute inset-0 w-full h-full"
       style={{
         backgroundImage: `url('${heroImage.imageUrl}')`,
-        backgroundSize: heroImage.objectFit || 'cover',
+        backgroundSize: heroImage.imageFit || 'contain',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed',
-        opacity: heroImage.opacity || 1,
+        opacity: heroImage.imageOpacity || 1,
         filter: filters,
         zIndex: 0,
       }}

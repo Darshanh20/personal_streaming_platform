@@ -3,7 +3,7 @@ import Footer from '../components/Footer';
 import AdminSongList from '../components/AdminSongList';
 import AdminEditSongForm from '../components/AdminEditSongForm';
 import AdminSongUploadForm from '../components/AdminSongUploadForm';
-import AdminHeroImageForm from '../components/AdminHeroImageForm';
+import AdminHeroSettingsForm from '../components/AdminHeroSettingsForm';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -20,6 +20,10 @@ export default function AdminPage() {
   const [editingSong, setEditingSong] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // Modal states
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [heroModalOpen, setHeroModalOpen] = useState(false);
+
   // Fetch songs from backend
   useEffect(() => {
     if (authenticated) {
@@ -32,7 +36,16 @@ export default function AdminPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${API_URL}/songs`);
+      const adminKey = import.meta.env.VITE_ADMIN_KEY;
+      if (!adminKey) {
+        throw new Error('Admin key not configured');
+      }
+
+      const response = await fetch(`${API_URL}/admin/songs`, {
+        headers: {
+          'x-admin-key': adminKey,
+        },
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch songs');
       }
@@ -178,10 +191,10 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <main className="flex-1 py-20 px-6 pt-32">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Admin Header */}
           <div className="mb-16">
-            <h1 className="text-4xl font-bold text-white mb-2">🎵 Admin Dashboard</h1>
+            <h1 className="text-4xl font-bold text-white mb-2">Admin Dashboard</h1>
             <p className="text-gray-400">Manage your music collection</p>
           </div>
 
@@ -192,20 +205,59 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Upload Form Section */}
-          <div className="mb-16 pb-16 border-b border-gray-800">
-            <AdminSongUploadForm onSuccess={handleUploadSuccess} />
-          </div>
+          {/* Quick Action Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 pb-16 border-b border-gray-800">
+            {/* Add Song Card */}
+            <div
+              onClick={() => setUploadModalOpen(true)}
+              className="group cursor-pointer bg-gray-950 border border-gray-800 hover:border-gray-700 transition-all duration-300 p-8 rounded-lg hover:shadow-lg hover:shadow-blue-900/20"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">Add New Song</h3>
+                <div className="text-4xl group-hover:scale-110 transition-transform duration-300">🎵</div>
+              </div>
+              <p className="text-gray-400 text-sm">Upload and add a new song to your collection</p>
+              <div className="mt-6 pt-4 border-t border-gray-800">
+                <button
+                  className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded transition-colors duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setUploadModalOpen(true);
+                  }}
+                >
+                  Open Editor
+                </button>
+              </div>
+            </div>
 
-          {/* Hero Image Section */}
-          <div className="mb-16 pb-16 border-b border-gray-800">
-            <AdminHeroImageForm onSuccess={handleUploadSuccess} />
+            {/* Hero Image Editor Card */}
+            <div
+              onClick={() => setHeroModalOpen(true)}
+              className="group cursor-pointer bg-gray-950 border border-gray-800 hover:border-gray-700 transition-all duration-300 p-8 rounded-lg hover:shadow-lg hover:shadow-purple-900/20"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">Hero Settings</h3>
+                <div className="text-4xl group-hover:scale-110 transition-transform duration-300">🎨</div>
+              </div>
+              <p className="text-gray-400 text-sm">Customize the hero banner on your homepage</p>
+              <div className="mt-6 pt-4 border-t border-gray-800">
+                <button
+                  className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded transition-colors duration-300"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setHeroModalOpen(true);
+                  }}
+                >
+                  Open Editor
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Songs List Section */}
           <div>
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">All Songs</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">📚 All Songs</h2>
               <p className="text-gray-400 text-sm">
                 {songs.length > 0 ? `${songs.length} song${songs.length !== 1 ? 's' : ''} in your collection` : 'No songs yet'}
               </p>
@@ -227,6 +279,58 @@ export default function AdminPage() {
         </div>
       </main>
 
+      {/* Upload Modal */}
+      {uploadModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-950 border border-gray-800 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-lg">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gray-950 border-b border-gray-800 px-8 py-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">🎵 Add New Song</h2>
+              <button
+                onClick={() => setUploadModalOpen(false)}
+                className="text-gray-400 hover:text-white text-2xl transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-8">
+              <AdminSongUploadForm onSuccess={() => {
+                setUploadModalOpen(false);
+                handleUploadSuccess();
+              }} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hero Settings Modal */}
+      {heroModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-950 border border-gray-800 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-lg">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-gray-950 border-b border-gray-800 px-8 py-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">🎨 Hero Settings</h2>
+              <button
+                onClick={() => setHeroModalOpen(false)}
+                className="text-gray-400 hover:text-white text-2xl transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-8">
+              <AdminHeroSettingsForm onSuccess={() => {
+                setHeroModalOpen(false);
+                handleUploadSuccess();
+              }} />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit Modal */}
       {editingSong && (
         <AdminEditSongForm
@@ -235,9 +339,6 @@ export default function AdminPage() {
           onCancel={() => setEditingSong(null)}
         />
       )}
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
