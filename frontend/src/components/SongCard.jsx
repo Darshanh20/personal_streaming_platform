@@ -1,35 +1,48 @@
-export default function SongCard({ title, artist = 'Artist', coverUrl, onPlay }) {
+export default function SongCard({ title, coverUrl, onPlay }) {
   return (
     <div className="group cursor-pointer">
-      {/* Cover */}
-      <div className="aspect-square bg-gray-900 border border-gray-800 flex items-center justify-center hover:border-gray-700 transition-all duration-300 mb-4 relative overflow-hidden">
+      {/* Album Image - Rounded, Full Width */}
+      <div className="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">
         {coverUrl ? (
           <img
             src={coverUrl}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+            onClick={onPlay}
           />
         ) : (
-          <div className="text-center group-hover:scale-110 transition-transform duration-300">
-            <div className="text-5xl mb-2">♫</div>
-            <p className="text-gray-500 text-xs">Album Cover</p>
+          <div
+            className="w-full h-full flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-300"
+            onClick={onPlay}
+          >
+            <div className="text-center">
+              <div className="text-5xl text-gray-600">♫</div>
+            </div>
           </div>
         )}
 
-        {/* Play Button Overlay */}
-        <button
-          onClick={onPlay}
-          className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-all duration-300"
-        >
-          <div className="text-white text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            ▶
-          </div>
-        </button>
+        {/* Subtle Shadow Overlay on Hover */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+          {/* Play Icon */}
+          <svg
+            className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
       </div>
 
-      {/* Info */}
-      <h3 className="text-white font-bold text-sm truncate">{title}</h3>
-      <p className="text-gray-500 text-xs truncate">{artist}</p>
+      {/* Text Content - Clean & Minimal */}
+      <div className="space-y-1">
+        <h3 className="text-white font-semibold text-base truncate group-hover:text-gray-100 transition-colors duration-300">
+          {title}
+        </h3>
+        <p className="text-gray-400 text-sm truncate">
+          Listen now
+        </p>
+      </div>
     </div>
   );
 }

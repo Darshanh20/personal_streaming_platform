@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { usePlayer } from '../context/PlayerContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export default function LatestRelease() {
   const [latestSong, setLatestSong] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { playSong } = usePlayer();
 
   useEffect(() => {
     fetchLatestSong();
@@ -17,7 +18,6 @@ export default function LatestRelease() {
       const data = await response.json();
 
       if (data.success && data.data && data.data.length > 0) {
-        // First song is the latest (sorted by createdAt desc in API)
         setLatestSong(data.data[0]);
       }
     } catch (error) {
@@ -27,79 +27,80 @@ export default function LatestRelease() {
     }
   };
 
-  const formatDuration = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
-    <section className="bg-black py-20 px-6 border-t border-gray-900">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-bold text-white mb-16 text-center">Latest Release</h2>
+    <section className="relative w-full min-h-[65vh] flex items-center justify-center overflow-hidden bg-linear-to-br from-[#0d0d19] via-[#141428] to-[#0a0a18]">
+      {/* Decorative Gradient Blobs - White & Gray Theme */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-1/2 -left-1/4 w-96 h-96 bg-black/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-black/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 right-1/3 w-80 h-80 bg-black/10 rounded-full blur-3xl" />
+      </div>
 
-        {loading ? (
-          <div className="text-center text-gray-400">Loading latest release...</div>
-        ) : latestSong ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {/* Cover Art */}
-            <div className="flex justify-center">
-              {latestSong.coverUrl ? (
-                <img
-                  src={latestSong.coverUrl}
-                  alt={latestSong.title}
-                  className="w-full aspect-square object-cover border border-gray-800 hover:border-gray-700 transition-colors duration-300"
-                />
-              ) : (
-                <div className="w-full aspect-square bg-gray-900 border border-gray-800 flex items-center justify-center hover:border-gray-700 transition-colors duration-300">
-                  <div className="text-center">
-                    <div className="text-8xl mb-4">♫</div>
-                    <p className="text-gray-500 text-sm">No Cover Art</p>
+      {loading ? (
+        <div className="relative z-10 text-center text-gray-400">
+          <p>Loading latest release...</p>
+        </div>
+      ) : latestSong ? (
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-20">
+          {/* 2-Column Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* LEFT: Album Artwork */}
+            <div className="flex justify-center md:justify-start order-2 md:order-1">
+              <div
+                className="group cursor-pointer"
+                onClick={() => latestSong && playSong(latestSong)}
+              >
+                {latestSong.coverUrl ? (
+                  <img
+                    src={latestSong.coverUrl}
+                    alt={latestSong.title}
+                    className="w-full max-w-sm aspect-square rounded-2xl object-cover shadow-2xl group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full max-w-sm aspect-square bg-gray-900 rounded-2xl flex items-center justify-center shadow-2xl">
+                    <div className="text-6xl text-gray-600">♫</div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
-            {/* Release Info */}
-            <div className="space-y-6">
+            {/* RIGHT: Song Details */}
+            <div className="flex flex-col justify-center space-y-8 order-1 md:order-2 md:text-left text-center">
+              {/* Title */}
               <div>
-                <h3 className="text-4xl font-bold text-white mb-3">{latestSong.title}</h3>
-                <p className="text-gray-400 text-lg leading-relaxed">
-                  {latestSong.description || 'Check out this fresh track with high-quality streaming and exclusive lyrics.'}
-                </p>
+                <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-2">
+                  {latestSong.title}
+                </h1>
+                <p className="text-sm text-gray-400">Latest Release</p>
               </div>
 
-              <div className="flex gap-4 text-sm text-gray-500">
-                {latestSong.duration && (
-                  <span>⏱️ {formatDuration(latestSong.duration)}</span>
-                )}
-                {latestSong.createdAt && (
-                  <span>📅 {new Date(latestSong.createdAt).toLocaleDateString()}</span>
-                )}
-              </div>
+              {/* Description */}
+              <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
+                {latestSong.description || 'Experience premium audio quality with our latest track. High-fidelity streaming and exclusive content.'}
+              </p>
 
+              {/* Listen Now Button */}
               <div className="pt-4">
-                <Link
-                  to="/songs"
-                  className="inline-block px-8 py-3 bg-white text-black font-medium hover:bg-gray-100 transition-colors duration-300"
+                <button
+                  onClick={() => latestSong && playSong(latestSong)}
+                  className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 active:scale-95 text-lg"
                 >
                   Listen Now
-                </Link>
+                </button>
               </div>
 
-              <div className="pt-4 border-t border-gray-800">
-                <p className="text-sm text-gray-500">
-                  {latestSong.audioUrl ? '🎵 High-quality streaming' : ''}
-                  {latestSong.audioUrl && latestSong.lyricsUrl ? ' • ' : ''}
-                  {latestSong.lyricsUrl ? '📝 Lyrics included' : ''}
-                </p>
-              </div>
+              {/* Quality Badge */}
+              <p className="text-xs text-gray-500">
+                🎧 High-quality streaming — Premium audio
+              </p>
             </div>
           </div>
-        ) : (
-          <div className="text-center text-gray-400">No songs available yet</div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="relative z-10 text-center text-gray-400 py-20">
+          No songs available yet
+        </div>
+      )}
     </section>
   );
 }

@@ -1,9 +1,7 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import FeatureCard from '../components/FeatureCard';
 import LatestRelease from '../components/LatestRelease';
 import HorizontalGallery from '../components/HorizontalGallery';
-import Footer from '../components/Footer';
 
 export default function Landing() {
   const features = [
@@ -69,24 +67,6 @@ export default function Landing() {
       <Navbar />
       <Hero />
 
-      {/* Features Section */}
-      <section className="bg-black py-20 px-6 border-t border-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-16 text-center">Featured Experience</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, idx) => (
-              <FeatureCard
-                key={idx}
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
       <LatestRelease />
       <HorizontalGallery />
 
@@ -96,23 +76,15 @@ export default function Landing() {
           <h2 className="text-4xl font-bold text-white">About</h2>
 
           <p className="text-lg text-gray-300 leading-relaxed">
-            I create rap, hip-hop, and experimental tracks. This platform is where I share my original music and lyrics.
-            Every release is carefully crafted with attention to production quality and lyrical depth.
-          </p>
-
-          <div className="pt-6">
-            <a
-              href="#"
-              className="text-white font-medium text-sm hover:text-gray-300 transition-colors duration-300 inline-flex items-center gap-2 group"
-            >
-              Read More
-              <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-            </a>
-          </div>
+            I’m Darshan, and music has always been my way of expressing the things I can’t always say out loud.
+            Over time, what started as ideas typed in my notes slowly turned into songs — each one carrying a story, a mood, or a memory.
+            This website is a place where I share all of that openly.
+            No labels, no filters, no middlemen — just my voice, my thoughts, and my creativity, directly to you.
+            Whether you came to explore, listen, or just vibe for a bit, I’m glad you’re here.
+            My journey is just getting started, and having you along for the ride makes it even better.          
+            </p>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

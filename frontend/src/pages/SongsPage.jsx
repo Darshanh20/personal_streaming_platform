@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import SongCard from '../components/SongCard';
-import Footer from '../components/Footer';
+import { usePlayer } from '../context/PlayerContext';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedSong, setSelectedSong] = useState(null);
+  const { playSong } = usePlayer();
 
   useEffect(() => {
     fetchSongs();
@@ -95,88 +95,17 @@ export default function SongsPage() {
           {/* Songs Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {songs.map((song) => (
-              <div key={song.id} onClick={() => setSelectedSong(song)}>
+              <div key={song.id} onClick={() => playSong(song)}>
                 <SongCard
                   title={song.title}
                   coverUrl={song.coverUrl}
-                  onPlay={() => setSelectedSong(song)}
+                  onPlay={() => playSong(song)}
                 />
               </div>
             ))}
           </div>
         </div>
       </main>
-
-      {/* Song Player Modal */}
-      {selectedSong && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 border border-gray-800 max-w-2xl w-full p-8 space-y-6">
-            {/* Close Button */}
-            <div className="flex justify-between items-start">
-              <h2 className="text-3xl font-bold text-white">{selectedSong.title}</h2>
-              <button
-                onClick={() => setSelectedSong(null)}
-                className="text-gray-400 hover:text-white text-2xl"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Cover Image */}
-            {selectedSong.coverUrl ? (
-              <img
-                src={selectedSong.coverUrl}
-                alt={selectedSong.title}
-                className="w-full h-64 object-cover border border-gray-800"
-              />
-            ) : (
-              <div className="w-full h-64 bg-linear-to-br from-gray-900 to-black border border-gray-800 flex items-center justify-center">
-                <div className="text-6xl">♫</div>
-              </div>
-            )}
-
-            {/* Song Details */}
-            <div className="space-y-4">
-              {selectedSong.description && (
-                <div>
-                  <p className="text-gray-400 text-sm">Description</p>
-                  <p className="text-white">{selectedSong.description}</p>
-                </div>
-              )}
-
-              <div className="flex gap-8">
-                <div>
-                  <p className="text-gray-400 text-sm">Duration</p>
-                  <p className="text-white text-lg">{formatDuration(selectedSong.duration)}</p>
-                </div>
-              </div>
-
-              {selectedSong.tags && selectedSong.tags.length > 0 && (
-                <div>
-                  <p className="text-gray-400 text-sm mb-2">Tags</p>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSong.tags.map((tag, idx) => (
-                      <span key={idx} className="bg-gray-800 text-gray-300 px-3 py-1 text-sm border border-gray-700">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Audio Player */}
-            {selectedSong.audioUrl && (
-              <div>
-                <p className="text-gray-400 text-sm mb-2">Player</p>
-                <audio controls src={selectedSong.audioUrl} className="w-full" />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      <Footer />
     </div>
   );
 }

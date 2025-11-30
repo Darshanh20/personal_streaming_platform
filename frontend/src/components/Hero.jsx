@@ -99,17 +99,6 @@ export default function Hero() {
           >
             {heroSettings.primaryBtnText}
           </Link>
-
-          <Link
-            to={heroSettings.secondaryBtnLink || '/lyrics'}
-            className={`px-10 py-3 font-semibold rounded-sm transition-all duration-300 w-full sm:w-auto text-center ${
-              textColor === 'black'
-                ? 'border border-black/80 text-black hover:bg-black hover:text-white'
-                : 'border border-white/80 text-white hover:bg-white hover:text-black'
-            }`}
-          >
-            {heroSettings.secondaryBtnText}
-          </Link>
         </div>
       </div>
 

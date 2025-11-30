@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Footer from '../components/Footer';
 import AdminSongList from '../components/AdminSongList';
 import AdminEditSongForm from '../components/AdminEditSongForm';
 import AdminSongUploadForm from '../components/AdminSongUploadForm';
