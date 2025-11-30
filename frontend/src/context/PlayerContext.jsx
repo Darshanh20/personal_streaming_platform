@@ -81,6 +81,16 @@ export function PlayerProvider({ children }) {
     setCurrentTime(0);
     shouldPlayRef.current = true;
     setIsPlaying(true);
+
+    // Track play count in backend
+    if (song && song.id) {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      fetch(`${API_URL}/admin/songs/${song.id}/play`, {
+        method: 'POST',
+      }).catch(error => {
+        console.warn('Could not track play count:', error);
+      });
+    }
   };
 
   // Toggle play/pause

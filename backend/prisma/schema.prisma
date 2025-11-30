@@ -45,6 +45,7 @@ model Song {
   tags        String[] // Array of tags (e.g., ["pop", "rock", "2024"])
   duration    Int      // Duration in seconds
   published   Boolean  @default(false) // Whether song is visible to public
+  plays       Int      @default(0) // Total number of times this song has been played
   createdAt   DateTime @default(now())
 
   // Relations

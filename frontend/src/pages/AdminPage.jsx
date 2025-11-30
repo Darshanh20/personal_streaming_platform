@@ -3,6 +3,7 @@ import AdminSongList from '../components/AdminSongList';
 import AdminEditSongForm from '../components/AdminEditSongForm';
 import AdminSongUploadForm from '../components/AdminSongUploadForm';
 import AdminHeroSettingsForm from '../components/AdminHeroSettingsForm';
+import AnalyticsDashboard from '../components/admin/AnalyticsDashboard';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -11,6 +12,9 @@ export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [adminPassword, setAdminPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
+
+  // Tab state
+  const [activeTab, setActiveTab] = useState('current'); // 'current' or 'analytics'
 
   // Dashboard state
   const [songs, setSongs] = useState([]);
@@ -204,8 +208,35 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Quick Action Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 pb-16 border-b border-gray-800">
+          {/* Tab Navigation */}
+          <div className="flex gap-2 mb-8">
+            <button
+              onClick={() => setActiveTab('current')}
+              className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === 'current'
+                  ? 'bg-white text-black'
+                  : 'bg-neutral-800 text-gray-400 hover:text-white hover:bg-neutral-700'
+              }`}
+            >
+              Manage Music
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                activeTab === 'analytics'
+                  ? 'bg-white text-black'
+                  : 'bg-neutral-800 text-gray-400 hover:text-white hover:bg-neutral-700'
+              }`}
+            >
+              Analytics
+            </button>
+          </div>
+
+          {/* Content Based on Active Tab */}
+          {activeTab === 'current' ? (
+            <>
+              {/* Quick Action Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 pb-16 border-b border-gray-800">
             {/* Add Song Card */}
             <div
               onClick={() => setUploadModalOpen(true)}
@@ -253,28 +284,32 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Songs List Section */}
-          <div>
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">📚 All Songs</h2>
-              <p className="text-gray-400 text-sm">
-                {songs.length > 0 ? `${songs.length} song${songs.length !== 1 ? 's' : ''} in your collection` : 'No songs yet'}
-              </p>
-            </div>
+              {/* Songs List Section */}
+              <div>
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-white mb-2">📚 All Songs</h2>
+                  <p className="text-gray-400 text-sm">
+                    {songs.length > 0 ? `${songs.length} song${songs.length !== 1 ? 's' : ''} in your collection` : 'No songs yet'}
+                  </p>
+                </div>
 
-            {loading ? (
-              <div className="bg-gray-950 border border-gray-800 p-12 text-center">
-                <p className="text-gray-400">Loading songs...</p>
+                {loading ? (
+                  <div className="bg-gray-950 border border-gray-800 p-12 text-center">
+                    <p className="text-gray-400">Loading songs...</p>
+                  </div>
+                ) : (
+                  <AdminSongList
+                    songs={songs}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    refreshTrigger={refreshTrigger}
+                  />
+                )}
               </div>
-            ) : (
-              <AdminSongList
-                songs={songs}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                refreshTrigger={refreshTrigger}
-              />
-            )}
-          </div>
+            </>
+          ) : (
+            <AnalyticsDashboard />
+          )}
         </div>
       </main>
 
@@ -310,7 +345,7 @@ export default function AdminPage() {
           <div className="bg-gray-950 border border-gray-800 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-lg">
             {/* Modal Header */}
             <div className="sticky top-0 bg-gray-950 border-b border-gray-800 px-8 py-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">🎨 Hero Settings</h2>
+              <h2 className="text-2xl font-bold text-white">� Hero Settings</h2>
               <button
                 onClick={() => setHeroModalOpen(false)}
                 className="text-gray-400 hover:text-white text-2xl transition-colors"

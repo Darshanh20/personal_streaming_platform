@@ -548,5 +548,128 @@ router.put('/toggle-publish', adminAuth, async (req, res) => {
   }
 });
 
-export default router;
+/**
+ * GET /admin/analytics
+ * Get analytics data about songs and plays
+ * Returns: total songs, published count, plays, top songs, trends, etc.
+ * Only accessible with valid admin authentication
+ */
+router.get('/analytics', adminAuth, async (req, res) => {
+  try {
+    // Get all songs
+    const allSongs = await prisma.song.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
+    // Calculate stats
+    const totalSongs = allSongs.length;
+    const totalPublishedSongs = allSongs.filter(song => song.published).length;
+    const totalPlays = allSongs.reduce((sum, song) => sum + (song.plays || 0), 0);
+
+    // Find most played song
+    const mostPlayedSong = allSongs.length > 0
+      ? allSongs.reduce((max, song) => (song.plays > (max.plays || 0) ? song : max), allSongs[0])
+      : null;
+
+    // Top 5 most played songs
+    const topSongs = allSongs
+      .sort((a, b) => (b.plays || 0) - (a.plays || 0))
+      .slice(0, 5);
+
+    // Published vs unpublished
+    const publishStats = {
+      published: totalPublishedSongs,
+      drafts: totalSongs - totalPublishedSongs,
+    };
+
+    // Generate play trends (last 30 days) - based on createdAt as proxy
+    const last30Days = [];
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const playsOnDay = allSongs
+        .filter(song => song.createdAt.toISOString().split('T')[0] === dateStr)
+        .reduce((sum, song) => sum + (song.plays || 0), 0);
+
+      last30Days.push({
+        date: dateStr,
+        playCount: playsOnDay,
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        totalSongs,
+        totalPublishedSongs,
+        totalPlays,
+        mostPlayedSong,
+        songs: allSongs,
+        playTrends: last30Days,
+        topSongs,
+        publishStats,
+      },
+    });
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to fetch analytics',
+    });
+  }
+});
+
+/**
+ * POST /admin/songs/:id/play
+ * Increment play count for a song
+ * Public endpoint - anyone can increment plays
+ */
+router.post('/songs/:id/play', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the song
+    const song = await prisma.song.findUnique({
+      where: { id },
+    });
+
+    if (!song) {
+      return res.status(404).json({
+        success: false,
+        error: 'Song not found',
+      });
+    }
+
+    // Increment play count
+    const updatedSong = await prisma.song.update({
+      where: { id },
+      data: {
+        plays: {
+          increment: 1,
+        },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'Play count incremented',
+      data: {
+        id: updatedSong.id,
+        plays: updatedSong.plays,
+      },
+    });
+  } catch (error) {
+    console.error('Play increment error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to increment play count',
+    });
+  }
+});
+
+export default router;
