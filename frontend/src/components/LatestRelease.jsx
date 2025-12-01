@@ -31,9 +31,9 @@ export default function LatestRelease() {
     <section className="relative w-full min-h-[65vh] flex items-center justify-center overflow-hidden bg-linear-to-br from-[#0d0d19] via-[#141428] to-[#0a0a18]">
       {/* Decorative Gradient Blobs - White & Gray Theme */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -left-1/4 w-96 h-96 bg-black/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-black/15 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 right-1/3 w-80 h-80 bg-black/10 rounded-full blur-3xl" />
+        <div className="absolute -top-1/2 -left-1/4 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-gray-600/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 right-1/3 w-80 h-80 bg-gray-500/10 rounded-full blur-3xl" />
       </div>
 
       {loading ? (
@@ -83,7 +83,7 @@ export default function LatestRelease() {
               <div className="pt-4">
                 <button
                   onClick={() => latestSong && playSong(latestSong)}
-                  className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 active:scale-95 text-lg"
+                  className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 active:scale-95 text-lg cursor-pointer"
                 >
                   Listen Now
                 </button>

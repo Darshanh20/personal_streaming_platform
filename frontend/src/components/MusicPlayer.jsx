@@ -89,7 +89,7 @@ export default function MusicPlayer() {
         <div className="hidden md:flex items-center gap-6">
           <button
             onClick={playPrevious}
-            className="text-white hover:text-green-500 transition-colors"
+            className="text-white hover:text-green-500 transition-colors cursor-pointer"
             title="Previous"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -99,7 +99,7 @@ export default function MusicPlayer() {
 
           <button
             onClick={togglePlayPause}
-            className="text-white hover:text-green-500 transition-colors"
+            className="text-white hover:text-green-500 transition-colors cursor-pointer"
             title={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? (
@@ -115,7 +115,7 @@ export default function MusicPlayer() {
 
           <button
             onClick={playNext}
-            className="text-white hover:text-green-500 transition-colors"
+            className="text-white hover:text-green-500 transition-colors cursor-pointer"
             title="Next"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@ export default function MusicPlayer() {
         {/* Mobile Play Button */}
         <button
           onClick={togglePlayPause}
-          className="md:hidden text-white hover:text-green-500 transition-colors shrink-0"
+          className="md:hidden text-white hover:text-green-500 transition-colors shrink-0 cursor-pointer"
           title={isPlaying ? 'Pause' : 'Play'}
         >
           {isPlaying ? (

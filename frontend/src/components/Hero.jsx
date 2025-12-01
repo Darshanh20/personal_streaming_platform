@@ -91,7 +91,7 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to={heroSettings.primaryBtnLink || '/songs'}
-            className={`px-10 py-3 font-semibold rounded-sm transition-colors duration-300 w-full sm:w-auto text-center ${
+            className={`px-10 py-3 font-semibold rounded-sm transition-colors duration-300 w-full sm:w-auto text-center cursor-pointer ${
               textColor === 'black'
                 ? 'bg-black text-white hover:bg-gray-900'
                 : 'bg-white text-black hover:bg-gray-100'

@@ -61,14 +61,14 @@ export default function AnalyticsDashboard() {
 
   if (error) {
     return (
-      <div className="bg-red-900/20 border border-red-800 text-red-400 px-6 py-4 rounded-lg">
+      <div className="bg-red-900/20 border border-red-800 text-red-400 px-6 py-4 rounded-lg cursor-pointer">
         Error: {error}
       </div>
     );
   }
 
   if (!analytics) {
-    return <div className="text-gray-400">No analytics data available</div>;
+    return <div className="text-gray-400 cursor-pointer">No analytics data available</div>;
   }
 
   return (
@@ -101,14 +101,12 @@ export default function AnalyticsDashboard() {
 
       {/* Charts Section */}
       <AnalyticsCharts
-        playTrends={analytics.playTrends}
         topSongs={analytics.topSongs}
-        publishStats={analytics.publishStats}
       />
 
       {/* Recent Songs Table */}
       <div>
-        <h2 className="text-2xl font-semibold text-white mb-6">Recent Songs</h2>
+        <h2 className="text-2xl font-semibold text-white mb-6 cursor-pointer">Recent Songs</h2>
         <RecentSongsTable songs={analytics.songs.slice(0, 10)} />
       </div>
     </div>

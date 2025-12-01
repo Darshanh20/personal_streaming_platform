@@ -290,7 +290,7 @@ export default function AdminHeroSettingsForm({ onSuccess }) {
             className={`flex-1 py-3 font-semibold rounded transition-all duration-300 ${
               submitting
                 ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-black hover:bg-gray-100'
+                : 'bg-white text-black hover:bg-gray-100 cursor-pointer'
             }`}
           >
             {submitting ? 'Saving...' : heroData ? '💾 Update' : '✨ Create'}
@@ -300,7 +300,7 @@ export default function AdminHeroSettingsForm({ onSuccess }) {
             <button
               type="button"
               onClick={handleDelete}
-              className="px-6 py-3 font-semibold text-red-500 bg-transparent border border-red-700 hover:border-red-600 hover:bg-red-900/20 transition-all duration-300 rounded"
+              className="px-6 py-3 font-semibold text-red-500 bg-transparent border border-red-700 hover:border-red-600 hover:bg-red-900/20 transition-all duration-300 rounded cursor-pointer"
             >
               🗑️ Delete
             </button>

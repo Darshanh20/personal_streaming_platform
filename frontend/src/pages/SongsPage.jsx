@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import SongCard from '../components/SongCard';
+import Navbar from '@components/Navbar';
+import SongCard from '@components/SongCard';
 import { usePlayer } from '../context/PlayerContext';
 
 export default function SongsPage() {

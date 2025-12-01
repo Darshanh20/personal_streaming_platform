@@ -42,19 +42,19 @@ export default function PublishButton({ songId, published, onToggle }) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-1">
       <button
         onClick={handleToggle}
         disabled={loading}
-        className={`px-3 py-1 rounded text-white font-semibold text-sm transition-all duration-300 ${
+        className={`flex-1 px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
           published
-            ? 'bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800'
-            : 'bg-green-600 hover:bg-green-700 disabled:bg-green-800'
-        } ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
+            ? 'bg-green-900/30 text-green-400 border border-green-900/40 hover:bg-green-900/40 hover:border-green-900/60'
+            : 'bg-yellow-900/30 text-yellow-400 border border-yellow-900/40 hover:bg-yellow-900/40 hover:border-yellow-900/60'
+        } ${loading ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
       >
-        {loading ? '...' : published ? 'Unpublish' : 'Publish'}
+        {loading ? '...' : published ? 'Unpub' : 'Publish'}
       </button>
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-red-500 text-xs text-center mt-0.5 cursor-pointer">{error}</p>}
     </div>
   );
 }

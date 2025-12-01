@@ -1,7 +1,7 @@
-import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
-import LatestRelease from '../components/LatestRelease';
-import HorizontalGallery from '../components/HorizontalGallery';
+import Navbar from '@components/Navbar';
+import Hero from '@components/Hero';
+import LatestRelease from '@components/LatestRelease';
+import HorizontalGallery from '@components/HorizontalGallery';
 
 export default function Landing() {
   const features = [

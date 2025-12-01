@@ -59,75 +59,78 @@ export default function AdminSongList({ songs: initialSongs, onEdit, onDelete, r
 
   if (!songs || songs.length === 0) {
     return (
-      <div className="bg-gray-950 border border-gray-800 p-12 text-center">
-        <p className="text-gray-400 text-lg">No songs uploaded yet</p>
+      <div className="bg-gray-950/50 border border-gray-800/50 p-8 md:p-12 text-center rounded-xl cursor-pointer">
+        <p className="text-gray-400 text-base md:text-lg cursor-pointer">No songs uploaded yet</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       {songs.map((song) => (
         <div
           key={song.id}
-          className="bg-gray-950 border border-gray-800 p-6 hover:border-gray-700 transition-colors duration-300"
+          className="group bg-linear-to-br from-gray-900 to-gray-950 border border-gray-800/60 rounded-2xl overflow-hidden hover:border-gray-700/80 hover:shadow-xl hover:shadow-black/40 transition-all duration-300"
         >
-          <div className="flex gap-6">
-            {/* Cover Image */}
-            <div className="shrink-0">
-              <div className="w-20 h-20 bg-gray-900 border border-gray-800 flex items-center justify-center">
-                {song.coverUrl ? (
-                  <img
-                    src={song.coverUrl}
-                    alt={song.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-gray-600 text-2xl">♫</span>
-                )}
+          {/* Album Cover */}
+          <div className="relative h-40 md:h-48 bg-gray-800 overflow-hidden">
+            {song.coverUrl ? (
+              <img
+                src={song.coverUrl}
+                alt={song.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-700 to-gray-800">
+                <span className="text-5xl text-gray-600 cursor-pointer">♫</span>
               </div>
+            )}
+            {/* Status Badge Overlay */}
+            <div className="absolute top-3 right-3">
+              <StatusBadge published={song.published} />
             </div>
+          </div>
 
-            {/* Song Info */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-1">
-                <h3 className="text-white font-semibold text-lg truncate">{song.title}</h3>
-                <StatusBadge published={song.published} />
-              </div>
-              <p className="text-gray-400 text-sm mt-1 line-clamp-2">
-                {song.description || 'No description'}
-              </p>
-              <div className="flex gap-4 text-xs text-gray-500 mt-3">
-                {song.duration && <span>⏱️ {song.duration}s</span>}
-                {song.createdAt && (
-                  <span>📅 {new Date(song.createdAt).toLocaleDateString()}</span>
-                )}
-              </div>
-            </div>
+          {/* Card Content */}
+          <div className="p-5 md:p-6 flex flex-col">
+            {/* Song Title */}
+            <h3 className="text-white font-bold text-lg md:text-xl leading-tight mb-3 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300 cursor-pointer">
+              {song.title}
+            </h3>
 
-            {/* Actions */}
-            <div className="flex gap-3 items-center shrink-0">
+            {/* Song Description */}
+            <p className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-2 flex-1 cursor-pointer">
+              {song.description || 'No description provided'}
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex gap-2 md:gap-2.5 items-center justify-between pt-4 border-t border-gray-800/50">
+              {/* Publish Button */}
               <PublishButton
                 songId={song.id}
                 published={song.published}
                 onToggle={handlePublishToggle}
               />
+
+              {/* Edit Button */}
               <button
                 onClick={() => onEdit(song)}
-                className="px-4 py-2 text-white border border-gray-600 hover:border-gray-400 hover:bg-gray-900 transition-all duration-300 text-sm font-medium"
+                className="flex-1 px-3 md:px-4 py-2 text-white text-xs md:text-sm font-medium bg-gray-800/60 hover:bg-gray-700 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
               >
                 Edit
               </button>
+
+              {/* Delete Button */}
               <button
                 onClick={() => handleDelete(song.id)}
                 disabled={deleting === song.id}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                className={`flex-1 px-3 md:px-4 py-2 text-xs md:text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 active:scale-95 ${
                   deleting === song.id
-                    ? 'text-gray-500 cursor-not-allowed'
-                    : 'text-red-500 hover:text-red-400'
+                    ? 'bg-red-900/40 text-red-400 cursor-not-allowed border border-red-900/30'
+                    : 'bg-red-900/20 text-red-400 border border-red-900/40 hover:bg-red-900/30 hover:border-red-900/60 cursor-pointer'
                 }`}
               >
-                {deleting === song.id ? 'Deleting...' : 'Delete'}
+                {deleting === song.id ? '...' : '✕'}
               </button>
             </div>
           </div>

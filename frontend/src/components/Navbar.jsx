@@ -5,7 +5,7 @@ export default function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems =   [
+  const navItems = [
     { id: 'home', label: 'Home', href: '/' },
     { id: 'music', label: 'Music', href: '/songs' },
   ];
@@ -55,7 +55,7 @@ export default function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-white text-xl hover:text-gray-300 transition-colors duration-300"
+          className="md:hidden text-white text-xl hover:text-gray-300 transition-colors duration-300 cursor-pointer"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? '✕' : '☰'}

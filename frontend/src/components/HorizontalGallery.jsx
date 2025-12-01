@@ -32,7 +32,7 @@ export default function HorizontalGallery() {
     <section className="bg-black w-full pb-32 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">More Releases</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-10 mt-10">More Releases</h2>
 
         {loading ? (
           <div className="text-center text-gray-400 py-20">Loading releases...</div>

@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className="bg-black border-t border-gray-800 py-12 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         {/* Left */}
-        <div className="text-gray-400 text-sm">
+        <div className="text-gray-400 text-sm cursor-pointer">
           DhxMusic © 2025. All rights reserved.
         </div>
 
@@ -19,7 +19,7 @@ export default function Footer() {
           {socialLinks.map((social) => (
             <button
               key={social.name}
-              className="text-gray-500 hover:text-gray-300 transition-all duration-300 text-2xl hover:scale-110"
+              className="text-gray-500 hover:text-gray-300 transition-all duration-300 text-2xl hover:scale-110 cursor-pointer"
               title={social.name}
               aria-label={social.name}
             >

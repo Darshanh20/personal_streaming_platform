@@ -95,10 +95,10 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
       <div className="bg-gray-950 border border-gray-800 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="sticky top-0 bg-gray-950 border-b border-gray-800 px-8 py-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Edit Song</h2>
+          <h2 className="text-2xl font-bold text-white cursor-pointer">Edit Song</h2>
           <button
             onClick={onCancel}
-            className="text-gray-400 hover:text-white text-2xl"
+            className="text-gray-400 hover:text-white text-2xl cursor-pointer"
             aria-label="Close"
           >
             ✕
@@ -109,14 +109,14 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
           {/* Error Message */}
           {error && (
-            <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4">
+            <div className="bg-red-900 border border-red-700 text-red-200 px-6 py-4 cursor-pointer">
               ❌ {error}
             </div>
           )}
 
           {/* Title */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">Song Title</label>
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Song Title</label>
             <input
               type="text"
               name="title"
@@ -129,7 +129,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
 
           {/* Description */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">Description</label>
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Description</label>
             <textarea
               name="description"
               value={formData.description}
@@ -142,7 +142,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
 
           {/* Lyrics */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">Lyrics</label>
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Lyrics</label>
             <textarea
               name="lyrics"
               value={formData.lyrics}
@@ -155,7 +155,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
 
           {/* Audio File */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">
               Audio File (Optional - leave empty to keep current)
             </label>
             <input
@@ -166,13 +166,13 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
               className="w-full px-4 py-2 bg-gray-900 border border-gray-800 text-white file:bg-gray-800 file:text-white file:border-0 file:px-3 file:py-2 file:cursor-pointer hover:file:bg-gray-700 transition-colors duration-300"
             />
             {files.audioFile && (
-              <p className="text-xs text-gray-400 mt-2">✓ {files.audioFile.name}</p>
+              <p className="text-xs text-gray-400 mt-2 cursor-pointer">✓ {files.audioFile.name}</p>
             )}
           </div>
 
           {/* Cover Image */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">
               Cover Image (Optional - leave empty to keep current)
             </label>
             <input
@@ -183,7 +183,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
               className="w-full px-4 py-2 bg-gray-900 border border-gray-800 text-white file:bg-gray-800 file:text-white file:border-0 file:px-3 file:py-2 file:cursor-pointer hover:file:bg-gray-700 transition-colors duration-300"
             />
             {files.coverImage && (
-              <p className="text-xs text-gray-400 mt-2">✓ {files.coverImage.name}</p>
+              <p className="text-xs text-gray-400 mt-2 cursor-pointer">✓ {files.coverImage.name}</p>
             )}
           </div>
 
@@ -195,7 +195,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
               className={`flex-1 py-3 font-semibold transition-all duration-300 ${
                 loading
                   ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'bg-white text-black hover:bg-gray-100'
+                  : 'bg-white text-black hover:bg-gray-100 cursor-pointer'
               }`}
             >
               {loading ? 'Saving...' : 'Save Changes'}
@@ -203,7 +203,7 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 py-3 font-semibold text-white bg-transparent border border-gray-800 hover:border-gray-600 transition-all duration-300"
+              className="flex-1 py-3 font-semibold text-white bg-transparent border border-gray-800 hover:border-gray-600 transition-all duration-300 cursor-pointer"
             >
               Cancel
             </button>
