@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useEffect } from 'react';
+import { createContext, useContext, useState, useRef, useEffect, useCallback } from 'react';
 
 const PlayerContext = createContext();
 
@@ -99,30 +99,24 @@ export function PlayerProvider({ children }) {
     setIsPlaying(!isPlaying);
   };
 
-  // Play next - random song from all songs
-  const playNext = () => {
+  // Play next - sequential song from all songs
+  const playNext = useCallback(() => {
     if (allSongs.length === 0) return;
     
-    // Filter out current song to avoid playing same song twice
-    const availableSongs = allSongs.filter(song => song.id !== currentSong?.id);
+    // Find current song index
+    const currentIndex = allSongs.findIndex(song => song.id === currentSong?.id);
     
-    if (availableSongs.length === 0) {
-      // If only one song exists, play it again
-      playSong(allSongs[0]);
-      return;
-    }
-
-    // Pick random song
-    const randomIndex = Math.floor(Math.random() * availableSongs.length);
-    const nextSong = availableSongs[randomIndex];
+    // Calculate next index (loop back to 0 at the end)
+    const nextIndex = (currentIndex + 1) % allSongs.length;
+    const nextSong = allSongs[nextIndex];
     
     // Add current song to history before playing next
     if (currentSong) {
-      setSongHistory([...songHistory, currentSong]);
+      setSongHistory(prev => [...prev, currentSong]);
     }
     
     playSong(nextSong);
-  };
+  }, [allSongs, currentSong, playSong]);
 
   // Play previous - play from history, or first song if no history
   const playPrevious = () => {

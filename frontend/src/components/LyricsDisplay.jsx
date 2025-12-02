@@ -46,19 +46,19 @@ export default function LyricsDisplay({ lyrics, title }) {
 
         {/* Lyrics Container */}
         <div
-          className={`bg-gray-900 rounded-2xl border border-gray-800 p-8 transition-all duration-300 ${
+          className={`relative bg-gray-900 rounded-2xl border border-gray-800 p-8 transition-all duration-300 ${
             isExpanded ? 'max-h-none' : 'max-h-96 overflow-hidden'
           }`}
         >
           <pre className="text-white font-mono text-base md:text-lg leading-relaxed whitespace-pre-wrap wrap-break-word">
             {lyrics}
           </pre>
-        </div>
 
-        {/* Expand Hint */}
-        {!isExpanded && (
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black via-black/80 to-transparent pointer-events-none rounded-2xl" />
-        )}
+          {/* Expand Hint - Gradient Overlay */}
+          {!isExpanded && (
+            <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-gray-900 via-gray-900/60 to-transparent pointer-events-none rounded-b-2xl" />
+          )}
+        </div>
       </div>
     </section>
   );

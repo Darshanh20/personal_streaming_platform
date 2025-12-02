@@ -25,8 +25,11 @@ export default function HorizontalGallery() {
       const data = await response.json();
 
       if (data.success && data.data) {
-        // Skip the first song (it's in Latest Release) and show the rest
-        setSongs(data.data.slice(1));
+        // Sort by plays (descending) and show top 3
+        const topSongs = data.data
+          .sort((a, b) => (b.plays || 0) - (a.plays || 0))
+          .slice(0, 3);
+        setSongs(topSongs);
       }
     } catch (error) {
       console.error('Error fetching songs:', error);
@@ -44,13 +47,14 @@ export default function HorizontalGallery() {
         {loading ? (
           <div className="text-center text-gray-400 py-20">Loading releases...</div>
         ) : songs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {songs.map((song) => (
-              <div
-                key={song.id}
-                className="group cursor-pointer"
-                onClick={() => handleSongClick(song)}
-              >
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-fit">
+              {songs.map((song) => (
+                <div
+                  key={song.id}
+                  className="group cursor-pointer"
+                  onClick={() => handleSongClick(song)}
+                >
                 {/* Album Image - Rounded, Full Width */}
                 <div className="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">
                   {song.coverUrl ? (
@@ -89,8 +93,9 @@ export default function HorizontalGallery() {
                     Listen now
                   </p>
                 </div>
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="text-center text-gray-400 py-20">No more releases available yet</div>

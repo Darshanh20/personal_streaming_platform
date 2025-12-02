@@ -52,7 +52,7 @@ export default function PublishButton({ songId, published, onToggle }) {
             : 'bg-yellow-900/30 text-yellow-400 border border-yellow-900/40 hover:bg-yellow-900/40 hover:border-yellow-900/60'
         } ${loading ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
       >
-        {loading ? '...' : published ? 'Unpub' : 'Publish'}
+        {loading ? '...' : published ? 'Unpublish' : 'Publish'}
       </button>
       {error && <p className="text-red-500 text-xs text-center mt-0.5 cursor-pointer">{error}</p>}
     </div>

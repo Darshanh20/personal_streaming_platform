@@ -6,13 +6,13 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    lyrics: '',
     songUrl: '',
   });
 
   const [files, setFiles] = useState({
     audioFile: null,
     coverImage: null,
+    lyricsFile: null,
   });
 
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,6 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
       setFormData({
         title: song.title || '',
         description: song.description || '',
-        lyrics: song.lyrics || '',
         songUrl: song.songUrl || '',
       });
     }
@@ -58,11 +57,11 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('lyrics', formData.lyrics);
       if (formData.songUrl) formDataToSend.append('songUrl', formData.songUrl);
 
       if (files.audioFile) formDataToSend.append('audio', files.audioFile);
       if (files.coverImage) formDataToSend.append('cover', files.coverImage);
+      if (files.lyricsFile) formDataToSend.append('lyrics', files.lyricsFile);
 
       const adminKey = import.meta.env.VITE_ADMIN_KEY;
       if (!adminKey) {
@@ -159,17 +158,21 @@ export default function AdminEditSongForm({ song, onSave, onCancel }) {
             )}
           </div>
 
-          {/* Lyrics */}
+          {/* Lyrics File */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Lyrics</label>
-            <textarea
-              name="lyrics"
-              value={formData.lyrics}
-              onChange={handleInputChange}
-              placeholder="Enter song lyrics"
-              rows="6"
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-gray-700 transition-colors duration-300 resize-none"
+            <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">
+              Lyrics File (Optional - leave empty to keep current)
+            </label>
+            <input
+              type="file"
+              name="lyricsFile"
+              onChange={handleFileChange}
+              accept=".txt,text/plain"
+              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 text-white file:bg-gray-800 file:text-white file:border-0 file:px-3 file:py-2 file:cursor-pointer hover:file:bg-gray-700 transition-colors duration-300"
             />
+            {files.lyricsFile && (
+              <p className="text-xs text-gray-400 mt-2 cursor-pointer">✓ {files.lyricsFile.name}</p>
+            )}
           </div>
 
           {/* Audio File */}

@@ -15,6 +15,7 @@ export default function SocialButtons({ song, pageUrl }) {
 
   const isYouTubeUrl = song.songUrl?.includes('youtube.com') || song.songUrl?.includes('youtu.be');
   const isInstagramUrl = song.songUrl?.includes('instagram.com');
+  const instagramUrl = isInstagramUrl ? song.songUrl : 'https://www.instagram.com/darshan.hotchandani/'; // Fallback to main Instagram
 
   return (
     <section className="bg-gray-950 py-12 px-6 border-y border-gray-800">
@@ -23,20 +24,18 @@ export default function SocialButtons({ song, pageUrl }) {
 
         <div className="flex flex-wrap gap-4">
           {/* Instagram Button */}
-          {isInstagramUrl && (
-            <a
-              href={song.songUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 px-6 py-3 bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 text-white rounded-full hover:shadow-lg hover:shadow-pink-500/50 hover:scale-105 transition-all duration-300 cursor-pointer font-semibold"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.011 4.85.07 3.252.148 4.771 1.691 4.919 4.919.059 1.266.07 1.646.07 4.85s-.011 3.585-.07 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.059-1.645.07-4.85.07-3.204 0-3.584-.011-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.059-1.265-.07-1.645-.07-4.849s.011-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.668.072 4.948c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.015-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
-                <circle cx="12" cy="12" r="3.6" />
-              </svg>
-              Follow on Instagram
-            </a>
-          )}
+          <a
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 px-6 py-3 bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 text-white rounded-full hover:shadow-lg hover:shadow-pink-500/50 hover:scale-105 transition-all duration-300 cursor-pointer font-semibold"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.011 4.85.07 3.252.148 4.771 1.691 4.919 4.919.059 1.266.07 1.646.07 4.85s-.011 3.585-.07 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.059-1.645.07-4.85.07-3.204 0-3.584-.011-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.059-1.265-.07-1.645-.07-4.849s.011-3.584.07-4.85c.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.668.072 4.948c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948s-.015-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" />
+              <circle cx="12" cy="12" r="3.6" />
+            </svg>
+            Follow on Instagram
+          </a>
 
           {/* Generic Share Button */}
           <button

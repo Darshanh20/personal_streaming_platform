@@ -47,6 +47,7 @@ router.get('/', async (req, res) => {
  * GET /songs/:id
  * Retrieve a single published song by ID
  * Public users only see published = true
+ * If lyricsUrl exists, fetches and includes lyrics content
  */
 router.get('/:id', async (req, res) => {
   try {
@@ -79,9 +80,26 @@ router.get('/:id', async (req, res) => {
       });
     }
 
+    // Fetch lyrics content if lyricsUrl exists
+    let lyrics = null;
+    if (song.lyricsUrl) {
+      try {
+        const response = await fetch(song.lyricsUrl);
+        if (response.ok) {
+          lyrics = await response.text();
+        }
+      } catch (error) {
+        console.warn('Warning: Could not fetch lyrics content:', error.message);
+      }
+    }
+
+    // Return song with lyrics content
     res.json({
       success: true,
-      data: song,
+      data: {
+        ...song,
+        lyrics: lyrics, // Add lyrics content to response
+      },
     });
   } catch (error) {
     console.error('Error fetching song:', error);
