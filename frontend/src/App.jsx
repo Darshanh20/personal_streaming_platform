@@ -4,6 +4,7 @@ import { PlayerProvider } from './context/PlayerContext'
 import MusicPlayer from '@components/MusicPlayer'
 import Landing from '@pages/Landing'
 import SongsPage from '@pages/SongsPage'
+import SongPage from '@pages/SongPage'
 import AdminPage from '@pages/AdminPage'
 
 function AppContent() {
@@ -17,6 +18,7 @@ function AppContent() {
           {/* Public Routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/songs" element={<SongsPage />} />
+          <Route path="/song/:id" element={<SongPage />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminPage />} />

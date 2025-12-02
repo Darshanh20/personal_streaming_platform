@@ -2,6 +2,7 @@ import Navbar from '@components/Navbar';
 import Hero from '@components/Hero';
 import LatestRelease from '@components/LatestRelease';
 import HorizontalGallery from '@components/HorizontalGallery';
+import FeaturedSocials from '@components/FeaturedSocials';
 
 export default function Landing() {
   const features = [
@@ -69,6 +70,7 @@ export default function Landing() {
 
       <LatestRelease />
       <HorizontalGallery />
+      <FeaturedSocials />
 
       {/* About Section */}
       <section className="bg-gray-950 py-20 px-6 border-t border-gray-900">

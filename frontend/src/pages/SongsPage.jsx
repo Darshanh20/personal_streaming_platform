@@ -95,11 +95,12 @@ export default function SongsPage() {
           {/* Songs Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {songs.map((song) => (
-              <div key={song.id} onClick={() => playSong(song)}>
+              <div key={song.id}>
                 <SongCard
+                  id={song.id}
+                  song={song}
                   title={song.title}
                   coverUrl={song.coverUrl}
-                  onPlay={() => playSong(song)}
                 />
               </div>
             ))}

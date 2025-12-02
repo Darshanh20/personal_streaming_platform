@@ -6,7 +6,7 @@ export default function AdminSongUploadForm({ onSuccess }) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    duration: '',
+    songUrl: '',
     tags: '',
     audioFile: null,
     coverImage: null,
@@ -43,10 +43,6 @@ export default function AdminSongUploadForm({ onSuccess }) {
         throw new Error('Title is required');
       }
 
-      if (!formData.duration || isNaN(formData.duration) || parseInt(formData.duration, 10) <= 0) {
-        throw new Error('Duration is required and must be a positive number (in seconds)');
-      }
-
       if (!formData.audioFile) {
         throw new Error('Audio file is required');
       }
@@ -55,7 +51,9 @@ export default function AdminSongUploadForm({ onSuccess }) {
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('duration', formData.duration);
+      if (formData.songUrl) {
+        formDataToSend.append('songUrl', formData.songUrl);
+      }
       if (formData.tags) {
         formDataToSend.append('tags', formData.tags);
       }
@@ -91,7 +89,7 @@ export default function AdminSongUploadForm({ onSuccess }) {
       setFormData({
         title: '',
         description: '',
-        duration: '',
+        songUrl: '',
         tags: '',
         audioFile: null,
         coverImage: null,
@@ -151,21 +149,19 @@ export default function AdminSongUploadForm({ onSuccess }) {
           />
         </div>
 
-        {/* Duration */}
+        {/* Song URL */}
         <div>
-          <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Duration (seconds)</label>
+          <label className="block text-white font-semibold mb-2 text-sm cursor-pointer">Song URL (YouTube, Spotify, etc.)</label>
           <input
-            type="number"
-            name="duration"
-            value={formData.duration}
+            type="url"
+            name="songUrl"
+            value={formData.songUrl}
             onChange={handleInputChange}
-            placeholder="Enter duration in seconds (e.g., 240 for 4 minutes)"
-            min="1"
+            placeholder="e.g., https://youtube.com/watch?v=... or https://open.spotify.com/track/..."
             className="w-full px-4 py-3 bg-gray-900 border border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-gray-700 transition-colors duration-300"
-            required
           />
-          {formData.duration && (
-            <p className="text-xs text-gray-400 mt-2 cursor-pointer">✓ {Math.floor(formData.duration / 60)}:{String(formData.duration % 60).padStart(2, '0')}</p>
+          {formData.songUrl && (
+            <p className="text-xs text-gray-400 mt-2 cursor-pointer">✓ URL added</p>
           )}
         </div>
 

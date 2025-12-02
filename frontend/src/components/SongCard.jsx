@@ -1,6 +1,28 @@
-export default function SongCard({ title, coverUrl, onPlay }) {
+import { useNavigate } from 'react-router-dom';
+import { usePlayer } from '../context/PlayerContext';
+
+export default function SongCard({ id, song, title, coverUrl, onPlay }) {
+  const navigate = useNavigate();
+  const { playSong } = usePlayer();
+
+  const handleClick = () => {
+    if (song) {
+      playSong(song);
+    } else if (onPlay) {
+      onPlay();
+    }
+    if (id) {
+      navigate(`/song/${id}`);
+    }
+  };
+
+  const handlePlayClick = (e) => {
+    e.stopPropagation();
+    handleClick();
+  };
+
   return (
-    <div className="group cursor-pointer">
+    <div className="group cursor-pointer" onClick={handleClick}>
       {/* Album Image - Rounded, Full Width */}
       <div className="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">
         {coverUrl ? (
@@ -8,12 +30,10 @@ export default function SongCard({ title, coverUrl, onPlay }) {
             src={coverUrl}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-            onClick={onPlay}
           />
         ) : (
           <div
             className="w-full h-full flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-300"
-            onClick={onPlay}
           >
             <div className="text-center">
               <div className="text-5xl text-gray-600">♫</div>
@@ -28,6 +48,7 @@ export default function SongCard({ title, coverUrl, onPlay }) {
             className="w-16 h-16 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             fill="currentColor"
             viewBox="0 0 24 24"
+            onClick={handlePlayClick}
           >
             <path d="M8 5v14l11-7z" />
           </svg>

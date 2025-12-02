@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePlayer } from '../context/PlayerContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -7,6 +8,12 @@ export default function HorizontalGallery() {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { playSong } = usePlayer();
+  const navigate = useNavigate();
+
+  const handleSongClick = (song) => {
+    playSong(song);
+    navigate(`/song/${song.id}`);
+  };
 
   useEffect(() => {
     fetchSongs();
@@ -42,7 +49,7 @@ export default function HorizontalGallery() {
               <div
                 key={song.id}
                 className="group cursor-pointer"
-                onClick={() => playSong(song)}
+                onClick={() => handleSongClick(song)}
               >
                 {/* Album Image - Rounded, Full Width */}
                 <div className="relative overflow-hidden rounded-xl mb-3 aspect-square bg-gray-900">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { usePlayer } from '../context/PlayerContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -7,6 +8,7 @@ export default function LatestRelease() {
   const [latestSong, setLatestSong] = useState(null);
   const [loading, setLoading] = useState(true);
   const { playSong } = usePlayer();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchLatestSong();
@@ -24,6 +26,13 @@ export default function LatestRelease() {
       console.error('Error fetching songs:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSongClick = () => {
+    if (latestSong) {
+      playSong(latestSong);
+      navigate(`/song/${latestSong.id}`);
     }
   };
 
@@ -48,7 +57,7 @@ export default function LatestRelease() {
             <div className="flex justify-center md:justify-start order-2 md:order-1">
               <div
                 className="group cursor-pointer"
-                onClick={() => latestSong && playSong(latestSong)}
+                onClick={handleSongClick}
               >
                 {latestSong.coverUrl ? (
                   <img
@@ -82,7 +91,7 @@ export default function LatestRelease() {
               {/* Listen Now Button */}
               <div className="pt-4">
                 <button
-                  onClick={() => latestSong && playSong(latestSong)}
+                  onClick={handleSongClick}
                   className="px-8 py-3 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 active:scale-95 text-lg cursor-pointer"
                 >
                   Listen Now

@@ -36,7 +36,7 @@ const sanitizeFilename = (filename) => {
  * - cover (File): JPG/PNG/WebP - Optional
  * - title (String): Song title - REQUIRED
  * - description (String): Song description - Optional
- * - duration (Number): Duration in seconds - REQUIRED
+ * - songUrl (String): YouTube or platform URL - Optional
  * - tags (String): Comma-separated tags - Optional
  */
 router.post(
@@ -51,13 +51,13 @@ router.post(
   async (req, res) => {
     try {
       // Validate required fields
-      const { title, description, duration, tags } = req.body;
+      const { title, description, songUrl, tags } = req.body;
       const { audio, lyrics, cover } = req.files || {};
 
-      if (!title || !duration) {
+      if (!title) {
         return res.status(400).json({
           success: false,
-          error: 'Missing required fields: title and duration',
+          error: 'Missing required field: title',
         });
       }
 
@@ -150,7 +150,7 @@ router.post(
           audioUrl,
           lyricsUrl,
           coverUrl,
-          duration: parseInt(duration, 10),
+          songUrl: songUrl || null,
           tags: tagsArray,
           uploadedById: admin.id,
         },
@@ -334,7 +334,7 @@ router.put(
   async (req, res) => {
     try {
       const { id } = req.params;
-      const { title, description, duration, tags } = req.body;
+      const { title, description, songUrl, tags } = req.body;
       const { audio, lyrics, cover } = req.files || {};
 
       // Find the song first
@@ -354,7 +354,7 @@ router.put(
       // Update text fields if provided
       if (title) updateData.title = title;
       if (description) updateData.description = description;
-      if (duration) updateData.duration = parseInt(duration, 10);
+      if (songUrl !== undefined) updateData.songUrl = songUrl || null;
       if (tags) {
         updateData.tags = tags
           .split(',')
