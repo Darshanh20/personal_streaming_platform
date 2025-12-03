@@ -29,6 +29,7 @@ export function PlayerProvider({ children }) {
     if (savedSong) {
       try {
         const song = JSON.parse(savedSong);
+        // Use initialization function instead of setState in effect
         setCurrentSong(song);
         
         if (savedTime) {

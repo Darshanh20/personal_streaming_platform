@@ -94,7 +94,6 @@ export default function AdminReviewsPanel() {
   // Categorize reviews
   const pendingReviews = reviews.filter((r) => !r.approved);
   const approvedReviews = reviews.filter((r) => r.approved);
-  const rejectedReviews = reviews.filter((r) => r.approved === false);
 
   if (loading) {
     return (
@@ -174,7 +173,7 @@ export default function AdminReviewsPanel() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white">Reviews Kanban Board</h2>
+        <h2 className="text-2xl font-bold text-white">Reviews Board</h2>
         <button
           onClick={fetchReviews}
           className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium cursor-pointer"

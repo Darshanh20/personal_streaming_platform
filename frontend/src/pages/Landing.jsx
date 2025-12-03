@@ -7,24 +7,6 @@ import ReviewForm from '@components/ReviewForm';
 import ReviewsCarousel from '@components/ReviewsCarousel';
 
 export default function Landing() {
-  const features = [
-    {
-      title: 'Stream Music',
-      description: 'High-quality playback of all my tracks in crystal clear audio.',
-      icon: '♫',
-    },
-    {
-      title: 'Lyrics Library',
-      description: 'Cleanly formatted lyrics for every song with full arrangements.',
-      icon: '📝',
-    },
-    {
-      title: 'Artwork',
-      description: 'Monochrome visuals and premium album covers.',
-      icon: '🎨',
-    },
-  ];
-
   return (
     <div className="bg-black text-white min-h-screen">
       <style>{`

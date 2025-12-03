@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@components/Navbar';
 import SongCard from '@components/SongCard';
-import { usePlayer } from '../context/PlayerContext';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { playSong } = usePlayer();
 
   useEffect(() => {
     fetchSongs();
@@ -30,12 +28,6 @@ export default function SongsPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatDuration = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   if (loading) {

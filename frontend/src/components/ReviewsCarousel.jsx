@@ -117,7 +117,7 @@ export default function ReviewsCarousel() {
               scrollbarWidth: 'none',
             }}
           >
-            {reviews.map((review, index) => (
+            {reviews.map((review) => (
               <div
                 key={review.id}
                 className="shrink-0 w-80 md:w-96 bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:shadow-purple-900/30 transition-all duration-300 p-6 border border-gray-800 hover:border-purple-700"

@@ -1,5 +1,3 @@
-import { formatDistanceToNow } from 'date-fns';
-
 export default function SongHeader({ song }) {
   if (!song) return null;
 

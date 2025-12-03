@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function YouTubeEmbed({ videoUrl }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [youtubeId, setYoutubeId] = useState(null);
-
-  useEffect(() => {
-    if (!videoUrl) return;
+  const [youtubeId] = useState(() => {
+    if (!videoUrl) return null;
 
     // Extract YouTube video ID from various URL formats
     let id = null;
@@ -17,9 +15,8 @@ export default function YouTubeEmbed({ videoUrl }) {
     } else if (videoUrl.includes('youtube.com/embed/')) {
       id = videoUrl.split('embed/')[1]?.split('?')[0];
     }
-
-    setYoutubeId(id);
-  }, [videoUrl]);
+    return id;
+  });
 
   if (!videoUrl || !youtubeId) {
     return (

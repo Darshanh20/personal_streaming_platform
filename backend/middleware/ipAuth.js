@@ -1,13 +1,23 @@
 /**
  * IP Whitelist Authentication Middleware
- * Only allows uploads from whitelisted IP addresses
+ * Only allows uploads from whitelisted IP addresses (development only)
+ * 
+ * In production (NODE_ENV=production), IP check is bypassed
+ * Security relies on ADMIN_SECRET header only
  *
  * Environment Variables:
- * - WHITELISTED_IPS comma-separated list of allowed IP addresses
+ * - WHITELISTED_IPS: comma-separated list of allowed IP addresses (dev only)
  *   Example: 192.168.1.100,192.168.1.101,127.0.0.1
+ * - NODE_ENV: set to 'production' to disable IP whitelist
  */
 
 export const ipAuth = (req, res, next) => {
+  // Skip IP check in production - rely on ADMIN_SECRET instead
+  if (process.env.NODE_ENV === 'production') {
+    console.log('✅ Running in production mode - IP whitelist disabled');
+    return next();
+  }
+
   const whitelistedIpsStr = process.env.WHITELISTED_IPS || '';
   
   if (!whitelistedIpsStr) {

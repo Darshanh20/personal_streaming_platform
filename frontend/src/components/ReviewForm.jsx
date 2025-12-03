@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../api';
 
+const REVIEW_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
 export default function ReviewForm() {
   const [name, setName] = useState('');
   const [comment, setComment] = useState('');
@@ -12,7 +14,6 @@ export default function ReviewForm() {
 
   const maxChars = 300;
   const charCount = comment.length;
-  const REVIEW_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   // Check if user can review
   useEffect(() => {

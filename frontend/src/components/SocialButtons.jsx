@@ -13,7 +13,6 @@ export default function SocialButtons({ song, pageUrl }) {
     }
   };
 
-  const isYouTubeUrl = song.songUrl?.includes('youtube.com') || song.songUrl?.includes('youtu.be');
   const isInstagramUrl = song.songUrl?.includes('instagram.com');
   const instagramUrl = isInstagramUrl ? song.songUrl : 'https://www.instagram.com/darshan.hotchandani/'; // Fallback to main Instagram
 
