@@ -3,6 +3,25 @@ import { API_BASE_URL } from '../api';
 
 const REVIEW_COOLDOWN = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
+// Safe localStorage wrapper for sandboxed contexts
+const safeLocalStorage = {
+  getItem: (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      console.warn('localStorage access denied:', e);
+      return null;
+    }
+  },
+  setItem: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn('localStorage write denied:', e);
+    }
+  },
+};
+
 export default function ReviewForm() {
   const [name, setName] = useState('');
   const [comment, setComment] = useState('');
@@ -17,7 +36,7 @@ export default function ReviewForm() {
 
   // Check if user can review
   useEffect(() => {
-    const lastReviewTime = localStorage.getItem('lastReviewTime');
+    const lastReviewTime = safeLocalStorage.getItem('lastReviewTime');
     
     if (lastReviewTime) {
       const lastReview = parseInt(lastReviewTime);
@@ -84,7 +103,7 @@ export default function ReviewForm() {
       }
 
       // Store the current time as the last review time
-      localStorage.setItem('lastReviewTime', Date.now().toString());
+      safeLocalStorage.setItem('lastReviewTime', Date.now().toString());
 
       setSuccess(true);
       setName('');

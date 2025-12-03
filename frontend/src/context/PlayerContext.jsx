@@ -9,6 +9,32 @@ const STORAGE_KEYS = {
   IS_PLAYING: 'player_is_playing',
 };
 
+// Safe localStorage wrapper for sandboxed contexts
+const safeLocalStorage = {
+  getItem: (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      console.warn('localStorage access denied:', e);
+      return null;
+    }
+  },
+  setItem: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn('localStorage write denied:', e);
+    }
+  },
+  removeItem: (key) => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn('localStorage remove denied:', e);
+    }
+  },
+};
+
 export function PlayerProvider({ children }) {
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,9 +48,9 @@ export function PlayerProvider({ children }) {
 
   // Load player state from localStorage on mount
   useEffect(() => {
-    const savedSong = localStorage.getItem(STORAGE_KEYS.CURRENT_SONG);
-    const savedTime = localStorage.getItem(STORAGE_KEYS.CURRENT_TIME);
-    const savedIsPlaying = localStorage.getItem(STORAGE_KEYS.IS_PLAYING);
+    const savedSong = safeLocalStorage.getItem(STORAGE_KEYS.CURRENT_SONG);
+    const savedTime = safeLocalStorage.getItem(STORAGE_KEYS.CURRENT_TIME);
+    const savedIsPlaying = safeLocalStorage.getItem(STORAGE_KEYS.IS_PLAYING);
 
     if (savedSong) {
       try {
@@ -44,9 +70,9 @@ export function PlayerProvider({ children }) {
         }
       } catch (error) {
         console.error('Error loading saved player state:', error);
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_TIME);
-        localStorage.removeItem(STORAGE_KEYS.IS_PLAYING);
+        safeLocalStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
+        safeLocalStorage.removeItem(STORAGE_KEYS.CURRENT_TIME);
+        safeLocalStorage.removeItem(STORAGE_KEYS.IS_PLAYING);
       }
     }
   }, []);
@@ -54,9 +80,9 @@ export function PlayerProvider({ children }) {
   // Save current song to localStorage
   useEffect(() => {
     if (currentSong) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(currentSong));
+      safeLocalStorage.setItem(STORAGE_KEYS.CURRENT_SONG, JSON.stringify(currentSong));
     } else {
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
+      safeLocalStorage.removeItem(STORAGE_KEYS.CURRENT_SONG);
     }
   }, [currentSong]);
 
@@ -64,7 +90,7 @@ export function PlayerProvider({ children }) {
   useEffect(() => {
     const saveInterval = setInterval(() => {
       if (currentSong && currentTime > 0) {
-        localStorage.setItem(STORAGE_KEYS.CURRENT_TIME, currentTime.toString());
+        safeLocalStorage.setItem(STORAGE_KEYS.CURRENT_TIME, currentTime.toString());
       }
     }, 1000); // Save every second to avoid excessive writes
 
@@ -73,7 +99,7 @@ export function PlayerProvider({ children }) {
 
   // Save playing state to localStorage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.IS_PLAYING, isPlaying.toString());
+    safeLocalStorage.setItem(STORAGE_KEYS.IS_PLAYING, isPlaying.toString());
   }, [isPlaying]);
 
   // Play a song
