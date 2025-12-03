@@ -23,6 +23,8 @@ app.use(
       'http://localhost:5173',
       'http://localhost:3000',
       process.env.FRONTEND_URL,
+      'https://dhxmusic.netlify.app',
+      /\.netlify\.app$/,  // Allow all Netlify preview deployments
       'https://dhxmusic.vercel.app',
       /\.vercel\.app$/,  // Allow all Vercel preview deployments
     ],
