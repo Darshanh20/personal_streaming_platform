@@ -6,10 +6,11 @@
     "VITE_API_URL": "@vite_api_url",
     "VITE_ADMIN_KEY": "@vite_admin_key"
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "^/(?!.*\\.(?:js|css|svg|png|jpg|jpeg|gif|ico|woff|woff2)$).*$",
+      "dest": "/index.html"
     }
   ]
 }
+
