@@ -9,6 +9,71 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 /**
+ * POST /admin/create
+ * Create a new admin user
+ * 
+ * Body:
+ * - username (String): Admin username - REQUIRED, must be unique
+ * - passwordHash (String): Admin password hash - REQUIRED
+ * 
+ * Example:
+ * {
+ *   "username": "admin",
+ *   "passwordHash": "hashed_password_here"
+ * }
+ */
+router.post('/create', async (req, res) => {
+  try {
+    const { username, passwordHash } = req.body;
+
+    // Validation
+    if (!username || !passwordHash) {
+      return res.status(400).json({
+        success: false,
+        error: 'Username and passwordHash are required',
+      });
+    }
+
+    // Check if admin already exists
+    const existingAdmin = await prisma.admin.findUnique({
+      where: { username },
+    });
+
+    if (existingAdmin) {
+      return res.status(400).json({
+        success: false,
+        error: 'Admin with this username already exists',
+      });
+    }
+
+    // Create admin
+    const newAdmin = await prisma.admin.create({
+      data: {
+        username,
+        passwordHash,
+      },
+      select: {
+        id: true,
+        username: true,
+        createdAt: true,
+      },
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin created successfully',
+      data: newAdmin,
+    });
+  } catch (error) {
+    console.error('Admin creation error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to create admin',
+    });
+  }
+});
+
+/**
  * Sanitize filename for Cloudinary
  * Removes special characters that Cloudinary's public_id doesn't allow
  */

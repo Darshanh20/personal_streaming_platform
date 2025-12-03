@@ -96,6 +96,18 @@ model HeroImage {
   updatedAt DateTime @updatedAt
 }
 
+// Review model - anonymous user reviews/feedback
+model Review {
+  id        String   @id @default(cuid())
+  name      String   // User's name (entered manually, not required to be unique)
+  comment   String   // Review text (max 300 chars enforced on frontend)
+  approved  Boolean  @default(false) // Admin approval status
+  createdAt DateTime @default(now())
+
+  @@index([approved])
+  @@index([createdAt])
+}
+
 // OPTIONAL FUTURE MODELS - Placeholders for future implementation
 
 // PlayHistory model - tracks user listening history

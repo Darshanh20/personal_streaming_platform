@@ -3,6 +3,8 @@ import Hero from '@components/Hero';
 import LatestRelease from '@components/LatestRelease';
 import HorizontalGallery from '@components/HorizontalGallery';
 import FeaturedSocials from '@components/FeaturedSocials';
+import ReviewForm from '@components/ReviewForm';
+import ReviewsCarousel from '@components/ReviewsCarousel';
 
 export default function Landing() {
   const features = [
@@ -71,6 +73,16 @@ export default function Landing() {
       <LatestRelease />
       <HorizontalGallery />
       <FeaturedSocials />
+
+      {/* Reviews Carousel Section */}
+      <ReviewsCarousel />
+
+      {/* Review Form Section */}
+      <section className="bg-black py-16 px-6 border-t border-gray-800">
+        <div className="max-w-3xl mx-auto">
+          <ReviewForm />
+        </div>
+      </section>
 
       {/* About Section */}
       <section className="bg-gray-950 py-20 px-6 border-t border-gray-900">

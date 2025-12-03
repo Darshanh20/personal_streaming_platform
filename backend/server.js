@@ -7,6 +7,7 @@ import { PrismaClient } from '@prisma/client';
 import adminRoutes from './routes/admin.js';
 import songsRoutes from './routes/songs.js';
 import heroRoutes from './routes/hero.js';
+import reviewsRoutes from './routes/reviews.js';
 
 dotenv.config();
 
@@ -61,14 +62,20 @@ app.get('/api/db-test', async (req, res) => {
 
 // ========== ROUTE REGISTRATION ==========
 
-// Admin routes (upload songs)
+// Admin routes (upload songs + review management)
 app.use('/api/admin', adminRoutes);
+
+// Review admin routes - also available under /api/admin/reviews
+app.use('/api/admin/reviews', reviewsRoutes);
 
 // Public song routes (get songs)
 app.use('/api/songs', songsRoutes);
 
 // Hero image routes (landing page hero/banner)
 app.use('/api/hero', heroRoutes);
+
+// Review routes (anonymous reviews - create & get approved)
+app.use('/api/reviews', reviewsRoutes);
 
 // ========== LEGACY ROUTES (for backward compatibility) ==========
 
@@ -198,6 +205,13 @@ const server = app.listen(PORT, () => {
   console.log(`     POST http://localhost:${PORT}/api/hero`);
   console.log(`     PUT http://localhost:${PORT}/api/hero/:id`);
   console.log(`     DELETE http://localhost:${PORT}/api/hero/:id`);
+  console.log('\n   Review Routes:');
+  console.log(`     POST http://localhost:${PORT}/api/reviews (create review)`);
+  console.log(`     GET http://localhost:${PORT}/api/reviews/approved (get approved)`);
+  console.log(`     GET http://localhost:${PORT}/api/admin/reviews (admin all)`);
+  console.log(`     PUT http://localhost:${PORT}/api/admin/reviews/:id/approve`);
+  console.log(`     PUT http://localhost:${PORT}/api/admin/reviews/:id/reject`);
+  console.log(`     DELETE http://localhost:${PORT}/api/admin/reviews/:id`);
   console.log('\n   User Routes:');
   console.log(`     GET http://localhost:${PORT}/api/users`);
   console.log(`     POST http://localhost:${PORT}/api/users`);
