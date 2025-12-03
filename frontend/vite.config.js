@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -16,4 +15,13 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
     },
   },
+  server: {
+    historyApiFallback: true
+  },
+  preview: {
+    historyApiFallback: true
+  },
+  build: {
+    outDir: 'dist'
+  }
 })
