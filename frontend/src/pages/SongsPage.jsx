@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@components/Navbar';
 import SongCard from '@components/SongCard';
+import NowPlaying from '@components/NowPlaying';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState([]);
@@ -76,6 +77,12 @@ export default function SongsPage() {
 
       <main className="flex-1 py-20 px-6 pt-32">
         <div className="max-w-7xl mx-auto">
+          {/* Now Playing Section */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-white mb-4">Now Playing</h2>
+            <NowPlaying />
+          </div>
+
           {/* Header */}
           <div className="mb-12">
             <h1 className="text-5xl font-bold text-white mb-2">Music Library</h1>

@@ -8,6 +8,7 @@ import adminRoutes from './routes/admin.js';
 import songsRoutes from './routes/songs.js';
 import heroRoutes from './routes/hero.js';
 import reviewsRoutes from './routes/reviews.js';
+import spotifyRoutes from './routes/spotify.js';
 
 dotenv.config();
 
@@ -82,6 +83,9 @@ app.use('/api/hero', heroRoutes);
 
 // Review routes (anonymous reviews - create & get approved)
 app.use('/api/reviews', reviewsRoutes);
+
+// Spotify now-playing routes
+app.use('/api/spotify', spotifyRoutes);
 
 // ========== LEGACY ROUTES (for backward compatibility) ==========
 
