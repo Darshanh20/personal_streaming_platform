@@ -5,8 +5,15 @@ export default function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [hasShownPrompt, setHasShownPrompt] = useState(false);
 
   useEffect(() => {
+    // Check if prompt was already shown in this session
+    const promptShown = sessionStorage.getItem('installPromptShown');
+    if (promptShown) {
+      setHasShownPrompt(true);
+    }
+
     // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
@@ -29,11 +36,13 @@ export default function InstallPrompt() {
       // Stash the event for later
       setDeferredPrompt(e);
       
-      // Show prompt only on mobile/smaller screens
-      if (window.innerWidth < 1024) {
+      // Show prompt only on mobile/smaller screens AND only if not shown yet
+      if (window.innerWidth < 1024 && !promptShown) {
         // Add a slight delay to avoid overwhelming the user
         setTimeout(() => {
           setShowPrompt(true);
+          setHasShownPrompt(true);
+          sessionStorage.setItem('installPromptShown', 'true');
         }, 2000); // Show after 2 seconds
       }
     };
@@ -45,6 +54,7 @@ export default function InstallPrompt() {
       setShowPrompt(false);
       setIsInstalled(true);
       setDeferredPrompt(null);
+      sessionStorage.setItem('installPromptShown', 'true');
       console.log('[PWA] App installed successfully');
     };
 
@@ -80,10 +90,11 @@ export default function InstallPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false);
+    sessionStorage.setItem('installPromptShown', 'true');
     // Don't clear deferredPrompt so user can install later via browser menu
   };
 
-  // Don't show if already installed or not mobile
+  // Don't show if already installed, not mobile, already shown, or no prompt available
   if (isInstalled || !isMobile || !showPrompt || !deferredPrompt) {
     return null;
   }
