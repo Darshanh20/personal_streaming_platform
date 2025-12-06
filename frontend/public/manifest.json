@@ -2,7 +2,7 @@
   "name": "DhxMusic - Streaming Platform",
   "short_name": "DhxMusic",
   "description": "Your personal music streaming platform with high-quality audio and reviews",
-  "start_url": "/",
+  "start_url": "/songs",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import './App.css'
 import { PlayerProvider } from './context/PlayerContext'
 import MusicPlayer from '@components/MusicPlayer'
+import InstallPrompt from '@components/InstallPrompt'
 import Landing from '@pages/Landing'
 import SongsPage from '@pages/SongsPage'
 import SongPage from '@pages/SongPage'
@@ -13,6 +14,7 @@ function AppContent() {
 
   return (
     <>
+      <InstallPrompt />
       <div className={`min-h-screen bg-gray-900 ${!isAdminPage ? 'pb-24' : ''}`}>
         <Routes>
           {/* Public Routes */}
